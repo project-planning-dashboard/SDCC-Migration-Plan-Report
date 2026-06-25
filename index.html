@@ -1142,6 +1142,15 @@ button[onclick*="switchTab('matrix'"]{display:none!important;}
 .fixed-ms-block .milestone-compact{display:block!important;width:100%!important;}
 .fixed-ms-block .milestone-compact table{width:100%!important;table-layout:fixed!important;}
 
+
+/* ── HIDE OLD RED EXCEL ERROR BANNER ── */
+#dataBanner{
+  display:none!important;
+}
+#excelLoadNote{
+  display:none!important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -3309,6 +3318,75 @@ document.addEventListener('DOMContentLoaded', initDashboard);
       };
       window[fn].__fixedMsHook = true;
     }
+  });
+})();
+</script>
+
+
+<script>
+/* ── SILENT EXCEL LOADER: GITHUB ONLY, NO RED BANNER ── */
+(function(){
+  const DATA_XLSX = './data.xlsx';
+
+  async function silentLoadExcel(){
+    const lastUpdated = document.getElementById('lastUpdated');
+
+    // Local file preview cannot fetch data.xlsx. Use embedded data without showing error.
+    if(location.protocol === 'file:'){
+      if(lastUpdated) lastUpdated.textContent = 'Local preview';
+      if(typeof renderDashboard === 'function') renderDashboard();
+      else if(typeof renderAll === 'function') renderAll();
+      else if(typeof initDashboard === 'function') initDashboard();
+      return;
+    }
+
+    try{
+      if(typeof XLSX === 'undefined') throw new Error('XLSX library missing');
+
+      const res = await fetch(DATA_XLSX + '?v=' + Date.now(), {cache:'no-store'});
+      if(!res.ok) throw new Error('data.xlsx not found');
+
+      const buffer = await res.arrayBuffer();
+      const wb = XLSX.read(buffer, {type:'array', cellDates:true});
+
+      if(typeof parseWorkbook === 'function'){
+        window.WORKBOOK_DATA = parseWorkbook(wb);
+      }else if(typeof parseExcelWorkbook === 'function'){
+        window.WORKBOOK_DATA = parseExcelWorkbook(wb);
+      }else if(typeof workbookToData === 'function'){
+        window.WORKBOOK_DATA = workbookToData(wb);
+      }
+
+      if(lastUpdated) lastUpdated.textContent = 'Live Excel loaded';
+
+      if(typeof renderDashboard === 'function') renderDashboard();
+      else if(typeof renderAll === 'function') renderAll();
+      else if(typeof initDashboard === 'function') initDashboard();
+
+      if(typeof applyFixedMilestoneTables === 'function'){
+        setTimeout(applyFixedMilestoneTables, 150);
+      }
+    }catch(e){
+      // No visible red error. Embedded data remains active.
+      console.warn('data.xlsx not loaded; embedded fallback is active:', e);
+      if(lastUpdated) lastUpdated.textContent = 'Embedded data';
+      if(typeof renderDashboard === 'function') renderDashboard();
+      else if(typeof renderAll === 'function') renderAll();
+      else if(typeof initDashboard === 'function') initDashboard();
+
+      if(typeof applyFixedMilestoneTables === 'function'){
+        setTimeout(applyFixedMilestoneTables, 150);
+      }
+    }
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    // Remove old error UI if any previous script created it.
+    setTimeout(function(){
+      document.querySelectorAll('#dataBanner,#excelLoadNote').forEach(x=>x.remove());
+    }, 50);
+
+    setTimeout(silentLoadExcel, 200);
   });
 })();
 </script>
