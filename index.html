@@ -241,7 +241,7 @@ body::before{
 }
 .bam-city-name{font-size:13px;font-weight:700;color:#fff;}
 .bam-city-sub{font-size:11px;color:rgba(255,255,255,.75);}
-.bam-table{width:100%;border-collapse:collapse;font-size:12px;overflow-x:auto;display:block;}
+/* bam-table base — overridden by compact BAM CSS below */
 .bam-table thead th{
   background:var(--ab-xlt);color:var(--ab);padding:8px 12px;
   font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;
@@ -785,8 +785,399 @@ body::before{
   font-size:11.5px!important;
 }
 
+
+/* ══════════════════════════════════════════════════════════════
+   BATCH ACTIVITY MATRIX  —  compact, multi-city grid layout
+   Cities sit 2–3 per row; table fills card width naturally
+══════════════════════════════════════════════════════════════ */
+
+/* ── Overview container: 2–3 cities side-by-side ── */
+#overviewBamSection {
+  display: grid !important;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)) !important;
+  gap: 14px !important;
+}
+
+/* ── City card ── */
+.bam-city-card {
+  background: var(--white);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  box-shadow: var(--sh-sm);
+  margin-bottom: 0 !important;
+  min-width: 0;
+}
+
+/* ── Card header ── */
+.bam-city-hdr {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 10px 13px;
+}
+.bam-hdr-icon { font-size: 19px; flex-shrink: 0; }
+.bam-city-name { font-size: 12.5px; font-weight: 800; color: #fff; line-height: 1.2; }
+.bam-city-sub  { font-size: 10px;  color: rgba(255,255,255,.75); margin-top: 1px; }
+.bam-hdr-pct   { font-size: 18px; font-weight: 800; color: #fff; margin-left: auto; }
+
+/* ── Table: fill the card width, columns size to content ── */
+.bam-table {
+  width: 100% !important;
+  border-collapse: collapse !important;
+  display: table !important;     /* NOT display:block */
+  font-size: 11.5px !important;
+  table-layout: auto !important; /* columns shrink to content */
+}
+
+/* ── Column header ── */
+.bam-th-batch {
+  text-align: left;
+  padding: 6px 8px;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  background: var(--ab-xlt);
+  color: var(--ab);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+  width: 52px;
+}
+.bam-th-pct {
+  text-align: center;
+  padding: 6px 6px;
+  font-size: 9.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .3px;
+  background: var(--ab-xlt);
+  color: var(--ab);
+  border-bottom: 2px solid var(--border);
+  width: 34px;
+}
+.bam-th-act {
+  text-align: center;
+  padding: 6px 5px;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .2px;
+  background: var(--ab-xlt);
+  color: var(--ab);
+  border-bottom: 2px solid var(--border);
+  white-space: nowrap;
+}
+
+/* ── Data rows ── */
+.bam-table tbody tr { border-bottom: 1px solid var(--border); }
+.bam-table tbody tr:hover { background: var(--surface); }
+.bam-table tbody tr:nth-child(even) { background: rgba(240,246,255,.4); }
+
+.bam-batch {
+  padding: 6px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+  white-space: nowrap;
+  vertical-align: middle;
+}
+.bam-ss {
+  font-size: 9px;
+  color: var(--text-faint);
+  font-weight: 400;
+  margin-left: 3px;
+}
+.bam-pct {
+  text-align: center;
+  padding: 6px 4px;
+  vertical-align: middle;
+}
+.bam-icon-cell {
+  text-align: center;
+  padding: 5px 4px;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+/* ── Stand-alone Batch Matrix tab: stacked single column ── */
+#bamContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+#bamContainer .bam-city-card {
+  width: 100%;
+}
+
+/* ═══════════════════════════════════════════════════════
+   FINAL FIX — BATCH ACTIVITY MATRIX FITS ALL COLUMNS
+   Keeps the five city cards on the same row and makes the
+   last activity column fully visible.
+═══════════════════════════════════════════════════════ */
+#overviewBamSection{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:10px!important;
+  align-items:start!important;
+  width:100%!important;
+}
+
+#overviewBamSection .bam-city-card{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  overflow:hidden!important;
+  margin:0!important;
+}
+
+#overviewBamSection .bam-city-hdr{
+  padding:8px 10px!important;
+  min-height:50px!important;
+}
+
+#overviewBamSection .bam-hdr-icon{
+  font-size:17px!important;
+}
+
+#overviewBamSection .bam-city-name{
+  font-size:11.2px!important;
+  line-height:1.1!important;
+}
+
+#overviewBamSection .bam-city-sub{
+  font-size:9px!important;
+  line-height:1.1!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+
+#overviewBamSection .bam-hdr-pct{
+  font-size:16px!important;
+}
+
+#overviewBamSection .bam-table{
+  width:100%!important;
+  min-width:0!important;
+  max-width:100%!important;
+  table-layout:fixed!important;
+  border-collapse:collapse!important;
+  display:table!important;
+  font-size:10px!important;
+}
+
+#overviewBamSection .bam-th-batch{
+  width:17%!important;
+  padding:5px 3px!important;
+  font-size:8.2px!important;
+  letter-spacing:0!important;
+  text-align:left!important;
+}
+
+#overviewBamSection .bam-th-pct{
+  width:10%!important;
+  padding:5px 2px!important;
+  font-size:8.2px!important;
+  letter-spacing:0!important;
+  text-align:center!important;
+}
+
+#overviewBamSection .bam-th-act{
+  width:14.6%!important;
+  padding:5px 1px!important;
+  font-size:7.4px!important;
+  letter-spacing:0!important;
+  text-align:center!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+
+#overviewBamSection .bam-batch{
+  padding:5px 3px!important;
+  font-size:10px!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:clip!important;
+}
+
+#overviewBamSection .bam-ss{
+  font-size:7px!important;
+  margin-left:1px!important;
+}
+
+#overviewBamSection .bam-pct{
+  padding:5px 1px!important;
+  font-size:9px!important;
+  text-align:center!important;
+}
+
+#overviewBamSection .bam-pct span{
+  font-size:9px!important;
+}
+
+#overviewBamSection .bam-icon-cell{
+  padding:5px 1px!important;
+  font-size:12px!important;
+  text-align:center!important;
+  width:14.6%!important;
+}
+
+#overviewBamSection .bam-table th,
+#overviewBamSection .bam-table td{
+  box-sizing:border-box!important;
+}
+
+/* Keep standalone Batch Matrix tab readable, but still compact */
+#bamContainer .bam-table{
+  width:100%!important;
+  table-layout:fixed!important;
+}
+#bamContainer .bam-th-batch{width:12%!important;}
+#bamContainer .bam-th-pct{width:8%!important;}
+#bamContainer .bam-th-act{width:16%!important;text-align:center!important;}
+#bamContainer .bam-icon-cell{text-align:center!important;}
+
+/* For medium screens keep one horizontal line with scroll instead of wrapping */
+@media(max-width:1500px){
+  #overviewBamSection{
+    grid-template-columns:repeat(5,280px)!important;
+    overflow-x:auto!important;
+    padding-bottom:8px!important;
+  }
+}
+
+
+/* ── FINAL CLEANUP ── */
+#tab-matrix{display:none!important;}
+button[onclick*="switchTab('matrix'"]{display:none!important;}
+.header-meta .upload-btn, #dataSourceChip{display:none!important;}
+
+
+/* ── RESTORE ORIGINAL COMPACT MILESTONE DATE TABLES ── */
+.milestone-compact{
+  width:100%!important;
+  border:1px solid var(--border)!important;
+  border-radius:10px!important;
+  overflow:hidden!important;
+  background:#fff!important;
+  box-shadow:0 1px 5px rgba(0,96,181,.06)!important;
+  margin-top:5px!important;
+  margin-bottom:8px!important;
+}
+.milestone-compact table{
+  width:100%!important;
+  border-collapse:collapse!important;
+  table-layout:fixed!important;
+  font-size:10.5px!important;
+}
+.milestone-compact th{
+  background:linear-gradient(135deg,var(--ab-xlt),#F7FBFF)!important;
+  color:var(--ab)!important;
+  font-size:8.8px!important;
+  font-weight:900!important;
+  text-transform:uppercase!important;
+  padding:5px 4px!important;
+  border-bottom:1px solid var(--border)!important;
+  text-align:left!important;
+}
+.milestone-compact td{
+  padding:5px 4px!important;
+  border-bottom:1px solid rgba(208,226,245,.65)!important;
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.milestone-compact .ms-name{font-weight:900!important;color:var(--ab)!important;padding-left:6px!important;}
+.milestone-compact .ms-date{font-weight:800!important;color:var(--text-primary)!important;font-size:9.8px!important;}
+.milestone-compact .ms-var{text-align:right!important;padding-right:6px!important;font-weight:900!important;font-size:10px!important;}
+.milestone-compact .ms-var.var-late{color:var(--crit)!important;}
+.milestone-compact .ms-var.var-early,.milestone-compact .ms-var.var-zero{color:var(--success)!important;}
+.city-section-title:has(+ .milestone-compact),
+.city-section-title.ms-title{
+  margin-top:8px!important;
+}
+
+
+/* Hide previous red embedded fallback banner; use the new excelLoadNote instead */
+#dataBanner{display:none!important;}
+
+
+/* ── FORCED MILESTONE TABLES VISUAL FIX ── */
+.forced-ms-wrap{margin-top:8px!important;}
+.forced-ms-wrap .city-section-title.ms-title{
+  height:auto!important;
+  min-height:18px!important;
+  margin:8px 0 4px!important;
+  padding:4px 0!important;
+  font-size:9px!important;
+  color:var(--text-muted)!important;
+  border-bottom:1px solid var(--border)!important;
+}
+.forced-ms-wrap .milestone-compact{
+  display:block!important;
+  width:100%!important;
+  margin-bottom:8px!important;
+}
+.forced-ms-wrap .milestone-compact table{
+  width:100%!important;
+  table-layout:fixed!important;
+}
+.forced-ms-wrap .milestone-compact th,
+.forced-ms-wrap .milestone-compact td{
+  white-space:nowrap!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+}
+.forced-ms-wrap .milestone-compact th:nth-child(1){width:24%!important;}
+.forced-ms-wrap .milestone-compact th:nth-child(2){width:28%!important;}
+.forced-ms-wrap .milestone-compact th:nth-child(3){width:30%!important;}
+.forced-ms-wrap .milestone-compact th:nth-child(4){width:18%!important;}
+
+
+/* ── MAKE FIXED MILESTONE TABLES VISIBLE ── */
+.fixed-ms-block{display:block!important;margin-top:8px!important;}
+.fixed-ms-block .date-pair-grid{display:block!important;}
+.fixed-ms-block .milestone-compact{display:block!important;width:100%!important;}
+.fixed-ms-block .milestone-compact table{width:100%!important;table-layout:fixed!important;}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+
+<script>
+/* ── FINAL CITY ORDER + DATA.XLSX LOADER FIX ── */
+(function(){
+  window.CITY_ORDER = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+  window.sortCities = function(list){
+    const order = window.CITY_ORDER;
+    return (list || []).slice().sort((a,b)=>{
+      const aa = String(a || '').toUpperCase();
+      const bb = String(b || '').toUpperCase();
+      const ia = order.indexOf(aa);
+      const ib = order.indexOf(bb);
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    });
+  };
+})();
+</script>
+
+
+<script>
+/* ── FIX CITY ORDER EVERYWHERE ── */
+(function(){
+  const ORDER = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+  window.CITY_ORDER = ORDER;
+  window.citySortIndex = function(c){
+    const i = ORDER.indexOf(String(c||'').toUpperCase());
+    return i < 0 ? 999 : i;
+  };
+  window.sortCities = function(list){
+    return (list || []).slice().sort((a,b)=>window.citySortIndex(a)-window.citySortIndex(b));
+  };
+})();
+</script>
+
 </head>
 <body>
 <div class="page">
@@ -826,11 +1217,6 @@ body::before{
     Overview
   </button>
 
-  <button class="tab-btn" onclick="switchTab('matrix',this)" role="tab">
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
-    Batch Matrix
-  </button>
-
   <button class="tab-btn" onclick="switchTab('milestones',this)" role="tab">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
     Milestones
@@ -856,23 +1242,7 @@ body::before{
 </div>
 
 <!-- ═══ TAB: CITY PROGRESS ═══ -->
-<div class="tab-panel" id="tab-cities" style="display:none!important;">
-  <div class="section-hdr">
-    <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
-    <div><h2>UPSTREAM PROGRESS BY CITY</h2><div class="hdr-sub">Detailed upstream batch and activity status per city</div></div>
-  </div>
-  <div class="cities-grid" id="citiesGrid"></div>
-</div>
-
-<!-- ═══ TAB: BATCH MATRIX ═══ -->
-<div class="tab-panel" id="tab-matrix">
-  <div class="section-hdr">
-    <div class="icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg></div>
-    <div><h2>BATCH PROGRESS MATRIX</h2><div class="hdr-sub">Activity completion per batch per city</div></div>
-  </div>
-  <div id="batchMatrixContainer"></div>
-</div>
-
+<div class="tab-panel" id="tab-cities" style="display:none!important;"><div class="cities-grid" id="citiesGrid"></div></div>
 <!-- ═══ TAB: ACTIVITY MATRIX ═══ -->
 <div class="tab-panel" id="tab-activity-matrix" style="display:none!important;">
   <div class="section-hdr">
@@ -1411,13 +1781,86 @@ function categoryStatusBlock(rows, col){
 }
 
 
+
+/* ── FIXED CITY MILESTONE TABLE DATA (E2E / SAT / LIVE ON) ── */
+const FIXED_CITY_MILESTONES = {
+  MADINAH: {
+    upstream: [
+      ['E2E','2026-09-03','2026-09-03'],
+      ['SAT','2026-09-10','2026-09-10'],
+      ['Live On','2026-09-15','2026-09-15']
+    ],
+    downstream: [
+      ['E2E','2026-12-28','2026-12-28'],
+      ['SAT','2027-01-04','2027-01-04'],
+      ['Live On','2026-12-30','2026-12-30']
+    ]
+  },
+  JEDDAH: {
+    upstream: [
+      ['E2E','2026-10-20','2026-10-20'],
+      ['SAT','2026-10-15','2026-10-15'],
+      ['Live On','2026-10-25','2026-10-25']
+    ],
+    downstream: [
+      ['E2E','2027-02-11','2027-02-11'],
+      ['SAT','2027-02-18','2027-02-18'],
+      ['Live On','2027-02-15','2027-02-15']
+    ]
+  },
+  MAKKAH: {
+    upstream: [
+      ['E2E','2026-09-28','2026-09-28'],
+      ['SAT','2026-10-04','2026-10-04'],
+      ['Live On','2026-10-07','2026-10-07']
+    ],
+    downstream: [
+      ['E2E','2027-01-21','2027-01-21'],
+      ['SAT','2027-01-26','2027-01-26'],
+      ['Live On','2027-01-23','2027-01-23']
+    ]
+  },
+  ABHA: {
+    upstream: [
+      ['E2E','2026-09-08','2026-09-08'],
+      ['SAT','2026-09-10','2026-09-10'],
+      ['Live On','2026-09-15','2026-09-15']
+    ],
+    downstream: [
+      ['E2E','2026-12-24','2026-12-31'],
+      ['SAT','2027-01-10','2027-01-10'],
+      ['Live On','2027-01-05','2027-01-05']
+    ]
+  },
+  JIZAN: {
+    upstream: [
+      ['E2E','2026-09-03','2026-09-03'],
+      ['SAT','2026-09-07','2026-09-07'],
+      ['Live On','2026-09-15','2026-09-15']
+    ],
+    downstream: [
+      ['E2E','2027-01-04','2026-12-28'],
+      ['SAT','2027-01-10','2027-01-11'],
+      ['Live On','2027-01-05','2027-01-12']
+    ]
+  }
+};
+
+function fixedMilestoneRowsForCity(city, stream){
+  const c = String(city||'').toUpperCase();
+  const arr = (FIXED_CITY_MILESTONES[c] && FIXED_CITY_MILESTONES[c][stream]) || [];
+  return arr.map(x => milestoneRow(x[0], x[1], x[2]));
+}
+
 function renderOverviewCityCard(city, rows, subtitle, mode){
   const col = CITY_COLORS[city]||'#0060B5';
   const icon = CITY_ICONS[city]||'🏙️';
   const st = activityStats(rows);
   const ms = getCityMilestones(rows);
-  const upstreamTable = milestoneMiniTable(ms.upstream.length ? ms.upstream : [milestoneRow('—', null, null)]);
-  const downstreamTable = milestoneMiniTable(ms.downstream.length ? ms.downstream : [milestoneRow('—', null, null)]);
+  const fixedUp = fixedMilestoneRowsForCity(city, 'upstream');
+  const fixedDn = fixedMilestoneRowsForCity(city, 'downstream');
+  const upstreamTable = milestoneMiniTable(fixedUp.length ? fixedUp : (ms.upstream.length ? ms.upstream : [milestoneRow('—', null, null)]));
+  const downstreamTable = milestoneMiniTable(fixedDn.length ? fixedDn : (ms.downstream.length ? ms.downstream : [milestoneRow('—', null, null)]));
 
   return `
   <div class="city-card" style="border-top:3px solid ${col};">
@@ -1450,16 +1893,13 @@ function renderOverviewCityCard(city, rows, subtitle, mode){
 
 function buildOverviewCharts(){
   const data = currentData.cities || {};
-  const cityNames = ['MADINAH','ABHA','JIZAN','JEDDAH','MAKKAH'];
+  const cityNames = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
 
   // ── 1. Overall Progress by City ──────────────────────────
   const overallCards = cityNames.map(city=>{
     const rows = visibleRows(data[city] || []);
     return renderOverviewCityCard(city, rows, 'All city activities', 'overall');
   }).join('');
-
-  // ── 2. Upstream Progress by City ─────────────────────────
-  const upstreamCards = buildUpstreamCards(cityNames);
 
   // ── 3. Delayed Activities ─────────────────────────────────
   const delayedCards = cityNames.map(city=>{
@@ -1496,12 +1936,6 @@ function buildOverviewCharts(){
     </div>
 
     <div class="section-hdr" style="margin-top:18px;">
-      <div class="icon"><svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
-      <div><h2>UPSTREAM PROGRESS BY CITY</h2><div class="hdr-sub">Batch status · Activity counts · Upstream activities only</div></div>
-    </div>
-    <div class="overview-section"><div class="overview-grid">${upstreamCards}</div></div>
-
-    <div class="section-hdr" style="margin-top:18px;">
       <div class="icon" style="background:var(--ab);"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
       <div><h2>BATCH ACTIVITY MATRIX</h2><div class="hdr-sub">Upstream activity status by batch · ✅ Done · 🔄 In Progress · ⏳ Not Started · 🚨 Delayed · ➖ N/A</div></div>
     </div>
@@ -1518,67 +1952,6 @@ function buildOverviewCharts(){
   buildActivityMatrixInto('overviewBamSection');
 }
 
-// ── Upstream city cards (compact) ────────────────────────────
-function buildUpstreamCards(cityNames){
-  const data = currentData;
-  const bprog = data.batch_progress || {};
-  return cityNames.map(city=>{
-    const col = CITY_COLORS[city]||'#0060B5';
-    const icon = CITY_ICONS[city]||'🏙️';
-    const rows = visibleRows(data.cities[city]||[]);
-    const upstream = rows.filter(r=>r.batch_no);
-    const batches = bprog[city]||[];
-    const bTotal = batches.length;
-    const bDone  = batches.filter(b=>b.completed>=100).length;
-    const bProg  = batches.filter(b=>b.completed>0&&b.completed<100).length;
-    const bNot   = batches.filter(b=>b.completed===0).length;
-    const bDel   = upstream.filter(r=>statusOf(r)==='Delayed').length;
-    const total   = upstream.length;
-    const done    = upstream.filter(r=>statusOf(r)==='Completed').length;
-    const inprog  = upstream.filter(r=>statusOf(r)==='In Progress').length;
-    const notst   = upstream.filter(r=>statusOf(r)==='Not Started').length;
-    const delayed = upstream.filter(r=>statusOf(r)==='Delayed').length;
-    const pct = total>0?Math.round(done/total*100):0;
-
-    const sr = (ico,lbl,cnt,tot,clr)=>{
-      const w = tot>0?Math.round(cnt/tot*100):0;
-      return `<div class="status-row">
-        <div class="status-label"><span class="si">${ico}</span>${lbl}</div>
-        <div class="status-bar-wrap"><div class="status-bar" style="width:${w}%;background:${clr};"></div></div>
-        <div class="status-count" style="color:${clr==='var(--crit)'?'var(--crit)':''};">${cnt}</div>
-      </div>`;
-    };
-
-    return `<div class="city-card" style="border-top:3px solid ${col};">
-      <div class="city-hdr" style="background:linear-gradient(135deg,${col}EE,${col});">
-        <div class="city-hdr-row">
-          <div class="city-icon">${icon}</div>
-          <div class="city-hdr-info"><h3>${city}</h3><div class="city-sub">${bTotal} Batches · ${total} Upstream</div></div>
-          <div class="city-overall-pct">${pct}%</div>
-        </div>
-        <div class="prog-bar-wrap" style="margin-top:8px;background:rgba(255,255,255,.2);">
-          <div class="prog-bar" style="width:${pct}%;background:#fff;opacity:.85;"></div>
-        </div>
-      </div>
-      <div class="city-body">
-        <div class="city-section-title" style="padding-top:6px;">📦 BATCH STATUS</div>
-        ${sr('📦','Total',bTotal,bTotal,col+'60')}
-        ${sr('✅','Done',bDone,bTotal,'var(--success)')}
-        ${sr('🔄','In Progress',bProg,bTotal,'var(--warn)')}
-        ${sr('⏳','Not Started',bNot,bTotal,'var(--border-strong)')}
-        ${sr('🚨','Delayed',bDel,bTotal,'var(--crit)')}
-        <div class="city-section-title" style="margin-top:10px;">📊 ACTIVITY STATUS</div>
-        ${sr('📊','Total',total,total,col+'60')}
-        ${sr('✅','Done',done,total,'var(--success)')}
-        ${sr('🔄','In Progress',inprog,total,'var(--warn)')}
-        ${sr('⏳','Not Started',notst,total,'var(--border-strong)')}
-        ${sr('🚨','Delayed',delayed,total,'var(--crit)')}
-      </div>
-    </div>`;
-  }).join('');
-}
-
-
 // ──────────────────────────────────────────────────────────
 // CITY CARDS
 // ──────────────────────────────────────────────────────────
@@ -1586,7 +1959,7 @@ function buildCityCards(){
   const data = currentData;
   const bprog = data.batch_progress;
   const bss = data.batch_ss;
-  const cityNames = ['MADINAH','ABHA','JIZAN','JEDDAH','MAKKAH'];
+  const cityNames = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
   
   let html = '';
   for(const city of cityNames){
@@ -1718,7 +2091,7 @@ function buildBatchMatrix(){
   const data = currentData;
   const bprog = data.batch_progress;
   const bss = data.batch_ss;
-  const cityNames = ['MADINAH','ABHA','JIZAN','JEDDAH','MAKKAH'];
+  const cityNames = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
   
   let html = '';
   for(const city of cityNames){
@@ -1789,98 +2162,97 @@ function buildBatchMatrix(){
 // ──────────────────────────────────────────────────────────
 function buildActivityMatrix(){
   const data = currentData;
-  const cityNames = ['MADINAH','ABHA','JIZAN','JEDDAH','MAKKAH'];
-  const actTypes = ['SLD Submission','SLD Validation','E2E for Grid SS','E2E Rectification','Cutover'];
+  const cityNames = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+  // Short column headers — keep cells narrow so table fits without scrolling
+  const actTypes = [
+    {key:'SLD Submission',   label:'SLD Sub'},
+    {key:'SLD Validation',   label:'SLD Val'},
+    {key:'E2E for Grid SS',  label:'E2E'},
+    {key:'E2E Rectification',label:'Rect.'},
+    {key:'Cutover',          label:'Cutover'}
+  ];
   const bss = data.batch_ss;
-  
+
   let html = '';
   for(const city of cityNames){
     const rows = (data.cities[city]||[]).filter(r=>r.batch_no);
-    const col = CITY_COLORS[city]||'#0060B5';
+    const col  = CITY_COLORS[city]||'#0060B5';
     const icon = CITY_ICONS[city]||'🏙️';
     const ssMap = bss[city]||{};
-    
-    // Get unique batches
+
     const batches = [...new Set(rows.map(r=>r.batch_no))].filter(Boolean).sort();
     if(!batches.length) continue;
-    
-    // Calc overall pct for header
+
     const total = rows.length;
-    const done = rows.filter(r=>r.status==='Completed').length;
-    const pct = total>0?Math.round(done/total*100):0;
-    
-    html += `
-    <div class="bam-city-card">
-      <div class="bam-city-hdr" style="background:linear-gradient(135deg,${col}DD,${col});">
-        <span style="font-size:22px;">${icon}</span>
-        <div>
-          <div class="bam-city-name">${city} — Upstream Progress</div>
-          <div class="bam-city-sub">${batches.length} batches · ${total} activities · ${pct}% complete</div>
-        </div>
-        <div style="margin-left:auto;font-size:22px;font-weight:800;color:#fff;">${pct}%</div>
-      </div>
-      <div style="overflow-x:auto;width:100%;">
-        <table class="bam-table" style="width:auto;min-width:300px;">
-          <thead>
-            <tr>
-              <th>Batch</th>
-              <th>Overall %</th>
-              <th>📄 SLD Submission</th>
-              <th>✔️ SLD Validation</th>
-              <th>🔌 E2E Grid SS</th>
-              <th>🛠️ E2E Rectification</th>
-              <th>🚀 Cutover</th>
-            </tr>
-          </thead>
-          <tbody>`;
-    
+    const done  = rows.filter(r=>r.status==='Completed').length;
+    const pct   = total>0 ? Math.round(done/total*100) : 0;
+
+    // Build table rows
+    let tbodyHtml = '';
     for(const batch of batches){
       const bRows = rows.filter(r=>r.batch_no===batch);
-      const bTotal = bRows.length;
       const bDone = bRows.filter(r=>r.status==='Completed').length;
-      const bPct = bTotal>0?Math.round(bDone/bTotal*100):0;
-      const ss = ssMap[batch]||'?';
-      
-      html += `<tr>
-        <td><span class="batch-num">${batch}</span> <span style="font-size:10.5px;color:var(--text-muted);">• ${ss} SS</span></td>
-        <td><span class="pct-chip" style="background:${getPctColor(bPct)}18;color:${getPctColor(bPct)};border-color:${getPctColor(bPct)}30;">${bPct}%</span></td>`;
-      
+      const bPct  = bRows.length>0 ? Math.round(bDone/bRows.length*100) : 0;
+      const ss    = ssMap[batch]||'';
+
+      let cells = '';
       for(const at of actTypes){
-        const aRow = bRows.find(r=>r.act_type===at);
+        const aRow = bRows.find(r=>r.act_type===at.key);
         if(!aRow){
-          html += `<td><span class="status-icon">➖</span></td>`;
+          cells += '<td class="bam-icon-cell">➖</td>';
         } else {
-          const si = STATUS_ICONS[aRow.status]||'⏳';
-          const tip = `${aRow.status}${aRow.planned_finish?' · Plan: '+fmtDate(aRow.planned_finish):''}${aRow.exp_finish?' · Exp: '+fmtDate(aRow.exp_finish):''}`;
-          html += `<td title="${tip}"><span class="status-icon">${si}</span></td>`;
+          const si  = STATUS_ICONS[aRow.status]||'⏳';
+          const tip = aRow.status
+            + (aRow.planned_finish ? ' · Plan: '+fmtDate(aRow.planned_finish) : '')
+            + (aRow.exp_finish     ? ' · Exp: ' +fmtDate(aRow.exp_finish)     : '');
+          cells += '<td class="bam-icon-cell" title="'+tip+'">'+si+'</td>';
         }
       }
-      html += '</tr>';
+
+      // Batch label: "01 · 6SS" keeps it very short
+      const bNum  = batch.replace('Batch ','');
+      const ssStr = ss ? ' <span class="bam-ss">'+ss+'SS</span>' : '';
+      tbodyHtml += '<tr>'
+        + '<td class="bam-batch">B'+bNum+ssStr+'</td>'
+        + '<td class="bam-pct"><span style="font-weight:800;font-size:11px;color:'+getPctColor(bPct)+';">'+bPct+'%</span></td>'
+        + cells
+        + '</tr>';
     }
-    
-    html += '</tbody></table></div></div>';
+
+    html += '<div class="bam-city-card">'
+      + '<div class="bam-city-hdr" style="background:linear-gradient(135deg,'+col+'DD,'+col+');">'
+      +   '<span class="bam-hdr-icon">'+icon+'</span>'
+      +   '<div style="flex:1;min-width:0;">'
+      +     '<div class="bam-city-name">'+city+'</div>'
+      +     '<div class="bam-city-sub">'+batches.length+' batches &middot; '+pct+'% done</div>'
+      +   '</div>'
+      +   '<span class="bam-hdr-pct">'+pct+'%</span>'
+      + '</div>'
+      + '<table class="bam-table">'
+      +   '<thead><tr>'
+      +     '<th class="bam-th-batch">Batch</th>'
+      +     '<th class="bam-th-pct">%</th>'
+      +     actTypes.map(a=>'<th class="bam-th-act">'+a.label+'</th>').join('')
+      +   '</tr></thead>'
+      +   '<tbody>'+tbodyHtml+'</tbody>'
+      + '</table>'
+      + '</div>';
   }
-  
+
   document.getElementById('bamContainer').innerHTML = html;
-  // Populate overview section — no wrapping bam-grid needed since we use CSS grid on #overviewBamSection
-  const __ovBam = document.getElementById('overviewBamSection');
-  if(__ovBam) __ovBam.innerHTML = html;
-  // Also render into overview if that container exists
-  const ovContainer = document.getElementById('overviewBamSection');
-  if(ovContainer) ovContainer.innerHTML = '<div class="bam-grid">' + html + '</div>';
+  const ovBam = document.getElementById('overviewBamSection');
+  if(ovBam) ovBam.innerHTML = html;
 }
 
-function buildActivityMatrixInto(containerId){
-  // Delegate to buildActivityMatrix which also populates the container
-  buildActivityMatrix();
-}
+
+function buildActivityMatrixInto(containerId){ buildActivityMatrix(); }
 
 // ──────────────────────────────────────────────────────────
 // MILESTONES
 // ──────────────────────────────────────────────────────────
 function buildMilestones(){
   const data = currentData;
-  const cityNames = ['MADINAH','ABHA','JIZAN','JEDDAH','MAKKAH'];
+  const cityNames = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
   const bss = data.batch_ss;
   
   // Build milestone rows from cutover activities
@@ -2277,7 +2649,7 @@ function loadFromGitHub(){
       console.warn('GitHub Excel fetch failed:', err.message);
       renderAll();
       showDataBanner(
-        'Excel file could not be loaded. Please confirm <b>data.xlsx</b> is placed beside the HTML file on GitHub. Using embedded fallback data.',
+        'Live Excel not found yet. Confirm <b>data.xlsx</b> is placed beside the HTML file on GitHub. Embedded fallback is temporarily used.',
         true
       );
     });
@@ -2331,7 +2703,7 @@ function initDashboard(){
       } else {
         // SheetJS unavailable (offline / CDN blocked) — use embedded data
         renderAll();
-        showDataBanner('SheetJS unavailable. Using embedded fallback data.', true);
+        showDataBanner('SheetJS unavailable. Embedded fallback is temporarily used.', true);
       }
     });
   }
@@ -2520,6 +2892,424 @@ document.addEventListener('DOMContentLoaded', initDashboard);
     });
     return out;
   };
+})();
+</script>
+
+
+<script>
+/* ── ROBUST GITHUB EXCEL LOADER ── */
+(function(){
+  const EXCEL_CANDIDATES = [
+    './data.xlsx',
+    './Data.xlsx',
+    './DATA.xlsx',
+    './SDCC%20-%20Migration%20,%20E2E%20%26%20SAT%20Plan%2020260618%20V1.0.xlsx'
+  ];
+
+  async function fetchFirstExcel(){
+    if(typeof XLSX === 'undefined') throw new Error('SheetJS XLSX library is not loaded.');
+    let lastErr = null;
+    for(const url of EXCEL_CANDIDATES){
+      try{
+        const res = await fetch(url + '?v=' + Date.now(), {cache:'no-store'});
+        if(!res.ok) throw new Error(url + ' HTTP ' + res.status);
+        const buffer = await res.arrayBuffer();
+        if(!buffer || buffer.byteLength < 1000) throw new Error(url + ' empty/invalid file');
+        const wb = XLSX.read(buffer, {type:'array', cellDates:true});
+        window.__EXCEL_WORKBOOK_LIVE = wb;
+        return {url, wb};
+      }catch(e){
+        lastErr = e;
+      }
+    }
+    throw lastErr || new Error('No Excel candidate loaded');
+  }
+
+  // If page has a workbook parser function, use it after loading live workbook.
+  window.loadGithubExcelData = async function(){
+    const status = document.getElementById('lastUpdated');
+    try{
+      const loaded = await fetchFirstExcel();
+
+      if(typeof parseWorkbook === 'function'){
+        window.WORKBOOK_DATA_LIVE = parseWorkbook(loaded.wb);
+      }else if(typeof parseExcelWorkbook === 'function'){
+        window.WORKBOOK_DATA_LIVE = parseExcelWorkbook(loaded.wb);
+      }else if(typeof workbookToData === 'function'){
+        window.WORKBOOK_DATA_LIVE = workbookToData(loaded.wb);
+      }
+
+      if(window.WORKBOOK_DATA_LIVE && window.WORKBOOK_DATA_LIVE.cities){
+        try{ window.WORKBOOK_DATA = window.WORKBOOK_DATA_LIVE; }catch(e){}
+      }
+
+      if(status) status.textContent = 'Live Excel loaded';
+      const banner = document.getElementById('dataBanner');
+      if(banner) banner.remove();
+
+      if(typeof renderDashboard === 'function') renderDashboard();
+      else if(typeof renderAll === 'function') renderAll();
+      else if(typeof initDashboard === 'function') initDashboard();
+
+      return true;
+    }catch(e){
+      if(status) status.textContent = 'Embedded fallback';
+      console.warn('Excel live load failed, using embedded fallback:', e);
+      return false;
+    }
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(()=>window.loadGithubExcelData && window.loadGithubExcelData(), 50);
+  });
+})();
+</script>
+
+
+<script>
+/* ── EXCEL LIVE LOADING FIX + USER-FRIENDLY FALLBACK ── */
+(function(){
+  const EXCEL_CANDIDATES = ['./data.xlsx','data.xlsx','./Data.xlsx','./DATA.xlsx'];
+
+  function showExcelNote(msg, isError){
+    let box = document.getElementById('excelLoadNote');
+    if(!box){
+      box = document.createElement('div');
+      box.id = 'excelLoadNote';
+      box.style.cssText = 'margin:10px 0 14px;padding:10px 14px;border-radius:10px;font-size:12px;font-weight:700;border:1px solid '+(isError?'#fecaca':'#bfdbfe')+';background:'+(isError?'#fff1f1':'#eff6ff')+';color:'+(isError?'#dc2626':'#0060B5')+';';
+      const tabs = document.querySelector('.tabs-nav');
+      if(tabs && tabs.parentNode) tabs.parentNode.insertBefore(box, tabs.nextSibling);
+    }
+    box.textContent = msg;
+    box.style.display = 'block';
+  }
+
+  async function tryLoadExcelFromGithub(){
+    if(location.protocol === 'file:'){
+      showExcelNote('Local preview cannot auto-read data.xlsx due to browser security. Upload to GitHub Pages or use the manual Upload Excel button for local testing.', false);
+      return false;
+    }
+    if(typeof XLSX === 'undefined'){
+      showExcelNote('SheetJS library is not loaded, so data.xlsx cannot be parsed.', true);
+      return false;
+    }
+    let lastError = null;
+    for(const url of EXCEL_CANDIDATES){
+      try{
+        const res = await fetch(url + '?v=' + Date.now(), {cache:'no-store'});
+        if(!res.ok) throw new Error(url + ' HTTP ' + res.status);
+        const buffer = await res.arrayBuffer();
+        const wb = XLSX.read(buffer, {type:'array', cellDates:true});
+        if(typeof parseWorkbook === 'function'){
+          window.WORKBOOK_DATA = parseWorkbook(wb);
+        }else if(typeof parseExcelWorkbook === 'function'){
+          window.WORKBOOK_DATA = parseExcelWorkbook(wb);
+        }else if(typeof workbookToData === 'function'){
+          window.WORKBOOK_DATA = workbookToData(wb);
+        }else{
+          // No parser found, keep embedded fallback but explain.
+          throw new Error('No workbook parser function found in HTML.');
+        }
+        const note = document.getElementById('excelLoadNote');
+        if(note) note.style.display = 'none';
+        const banner = document.getElementById('dataBanner');
+        if(banner) banner.remove();
+        const lu = document.getElementById('lastUpdated');
+        if(lu) lu.textContent = 'Live Excel loaded';
+        if(typeof renderDashboard === 'function') renderDashboard();
+        else if(typeof renderAll === 'function') renderAll();
+        else if(typeof initDashboard === 'function') initDashboard();
+        return true;
+      }catch(e){
+        lastError = e;
+      }
+    }
+    showExcelNote('data.xlsx was not loaded. On GitHub, confirm the Excel file name is exactly data.xlsx and it is uploaded in the same folder/root as index.html. Embedded fallback is shown now.', true);
+    console.warn('Excel loading failed:', lastError);
+    return false;
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(tryLoadExcelFromGithub, 150);
+  });
+})();
+</script>
+
+
+<script>
+/* ── FORCE ADD MILESTONE DATE TABLES INSIDE EACH CITY CARD ── */
+(function(){
+  const CITY_ORDER_FINAL = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+
+  function norm(v){ return String(v || '').toUpperCase().replace(/\s+/g,' ').trim(); }
+  function cityKey(v){ return norm(v); }
+
+  function allRowsForCity(city){
+    const key = cityKey(city);
+    const d = window.WORKBOOK_DATA || {};
+    if(d.cities && d.cities[key]) return d.cities[key] || [];
+    if(Array.isArray(d.rows)) return d.rows.filter(r => cityKey(r.city || r.City) === key);
+    if(Array.isArray(d.activities)) return d.activities.filter(r => cityKey(r.city || r.City) === key);
+    return [];
+  }
+
+  function parseDate(v){
+    if(!v) return null;
+    if(v instanceof Date && !isNaN(v)) return v;
+    if(typeof v === 'number'){
+      // Excel serial date
+      const utc = Math.round((v - 25569) * 86400 * 1000);
+      const d = new Date(utc);
+      return isNaN(d) ? null : d;
+    }
+    const s = String(v).trim();
+    if(!s || /^(done|completed|started|n\/a|-|_)$/i.test(s)) return null;
+    let d = new Date(s);
+    if(!isNaN(d)) return d;
+
+    // dd-mmm-yy / dd mmm yy
+    const m = s.match(/^(\d{1,2})[-\s\/]([A-Za-z]{3,})[-\s\/](\d{2,4})$/);
+    if(m){
+      const months = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,sept:8,oct:9,nov:10,dec:11};
+      const mo = months[m[2].toLowerCase()];
+      let y = Number(m[3]);
+      if(y < 100) y += 2000;
+      if(mo !== undefined){
+        d = new Date(y, mo, Number(m[1]));
+        if(!isNaN(d)) return d;
+      }
+    }
+
+    // dd/mm/yyyy
+    const n = s.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})$/);
+    if(n){
+      let y = Number(n[3]); if(y < 100) y += 2000;
+      d = new Date(y, Number(n[2])-1, Number(n[1]));
+      if(!isNaN(d)) return d;
+    }
+    return null;
+  }
+
+  function fmtDate(v){
+    const d = parseDate(v);
+    if(!d) return '—';
+    return d.toLocaleDateString('en-GB', {day:'2-digit', month:'short', year:'2-digit'}).replace(',', '');
+  }
+
+  function diffDays(plan, exp){
+    const p = parseDate(plan), e = parseDate(exp);
+    if(!p || !e) return null;
+    return Math.round((e - p) / 86400000);
+  }
+
+  function rowText(r){
+    return norm([
+      r.activity, r.Activity, r.act_type, r.type, r.batch_label, r.batch_no, r.section
+    ].filter(Boolean).join(' '));
+  }
+
+  function getPlan(r){ return r.planned_finish ?? r.pl_finish ?? r.plan_finish ?? r.PlannedFinish ?? r["Planned Finish"] ?? r["PL Finish"]; }
+  function getExp(r){ return r.exp_finish ?? r.expected_finish ?? r.ExpectedFinish ?? r["Expected Finish"] ?? r["EXP Finish"]; }
+
+  function latestRow(rows, predicate){
+    const matches = rows.filter(predicate).filter(r => parseDate(getPlan(r)) || parseDate(getExp(r)));
+    if(!matches.length) return null;
+    return matches.sort((a,b)=>{
+      const da = parseDate(getExp(a)) || parseDate(getPlan(a)) || new Date(0);
+      const db = parseDate(getExp(b)) || parseDate(getPlan(b)) || new Date(0);
+      return db - da;
+    })[0];
+  }
+
+  function milestoneRow(label, row){
+    const plan = row ? getPlan(row) : null;
+    const exp = row ? getExp(row) : null;
+    const v = diffDays(plan, exp);
+    const cls = v === null ? '' : v > 0 ? 'var-late' : 'var-zero';
+    const txt = v === null ? '—' : (v > 0 ? `+${v}d` : `${v}d`);
+    return `<tr>
+      <td class="ms-name">${label}</td>
+      <td class="ms-date">${fmtDate(plan)}</td>
+      <td class="ms-date">${fmtDate(exp)}</td>
+      <td class="ms-var ${cls}">${txt}</td>
+    </tr>`;
+  }
+
+  function tableHtml(title, rows){
+    return `
+      <div class="city-section-title ms-title">${title}</div>
+      <div class="milestone-compact">
+        <table>
+          <thead>
+            <tr><th>Item</th><th>Plan</th><th>Expected</th><th>Var.</th></tr>
+          </thead>
+          <tbody>${rows.join('')}</tbody>
+        </table>
+      </div>`;
+  }
+
+  function cityMilestones(city){
+    const rows = allRowsForCity(city);
+
+    // Upstream criteria:
+    // E2E Upstream = last E2E - Upstream / E2E for Grid SS batch row
+    // SAT Upstream = ADMS SAT Upstream / Upstream SAT
+    // Live On = Cutover Upstream Live-on / Option 2 / Live On
+    const upE2E = latestRow(rows, r => {
+      const t = rowText(r);
+      return t.includes('E2E') && (t.includes('UPSTREAM') || t.includes('GRID SS')) && !t.includes('RECTIFICATION') && !t.includes('DOWNSTREAM');
+    });
+    const upSAT = latestRow(rows, r => {
+      const t = rowText(r);
+      return t.includes('SAT') && (t.includes('ADMS') || t.includes('UPSTREAM')) && !t.includes('DOWNSTREAM');
+    });
+    const upLive = latestRow(rows, r => {
+      const t = rowText(r);
+      return (t.includes('CUTOVER') || t.includes('CUTTOVER') || t.includes('LIVE ON') || t.includes('LIVE-ON') || t.includes('GO LIVE')) &&
+             (t.includes('UPSTREAM') || t.includes('LIVE') || t.includes('OPTION 2'));
+    });
+
+    // Downstream criteria:
+    // E2E Downstream = downstream E2E / E2E for SFD
+    // SAT Downstream = Downstream SAT
+    // Live On = downstream cutover / final cutover
+    const dnE2E = latestRow(rows, r => {
+      const t = rowText(r);
+      return t.includes('E2E') && (t.includes('DOWNSTREAM') || t.includes('SFD'));
+    });
+    const dnSAT = latestRow(rows, r => {
+      const t = rowText(r);
+      return t.includes('SAT') && t.includes('DOWNSTREAM');
+    });
+    const dnLive = latestRow(rows, r => {
+      const t = rowText(r);
+      return (t.includes('CUTOVER') || t.includes('CUTTOVER') || t.includes('LIVE ON') || t.includes('LIVE-ON') || t.includes('GO LIVE')) &&
+             t.includes('DOWNSTREAM');
+    });
+
+    return tableHtml('🔵 UPSTREAM MILESTONES', [
+      milestoneRow('E2E', upE2E),
+      milestoneRow('SAT', upSAT),
+      milestoneRow('Live On', upLive)
+    ]) + tableHtml('🟣 DOWNSTREAM MILESTONES', [
+      milestoneRow('E2E', dnE2E),
+      milestoneRow('SAT', dnSAT),
+      milestoneRow('Live On', dnLive)
+    ]);
+  }
+
+  function detectCityFromCard(card){
+    const h = card.querySelector('h3, .city-hdr-info h3, .bam-city-name');
+    if(!h) return '';
+    return norm(h.textContent).split(/\s+/)[0];
+  }
+
+  window.forceAddMilestoneTables = function(){
+    const cards = Array.from(document.querySelectorAll('#overviewCharts .city-card'));
+    cards.forEach(card => {
+      const city = detectCityFromCard(card);
+      if(!CITY_ORDER_FINAL.includes(city)) return;
+      const body = card.querySelector('.city-body');
+      if(!body) return;
+
+      // Remove any old milestone tables first to avoid duplication
+      body.querySelectorAll('.milestone-compact, .ms-title').forEach(el => el.remove());
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'forced-ms-wrap';
+      wrapper.innerHTML = cityMilestones(city);
+      body.appendChild(wrapper);
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(window.forceAddMilestoneTables, 300);
+    setTimeout(window.forceAddMilestoneTables, 1000);
+  });
+
+  // Hook common render functions so tables are re-added after any re-render
+  ['renderDashboard','renderAll','initDashboard'].forEach(fn=>{
+    if(typeof window[fn] === 'function' && !window[fn].__msWrapped){
+      const old = window[fn];
+      window[fn] = function(){
+        const r = old.apply(this, arguments);
+        setTimeout(window.forceAddMilestoneTables, 100);
+        return r;
+      };
+      window[fn].__msWrapped = true;
+    }
+  });
+})();
+</script>
+
+
+<script>
+/* ── ENFORCE MILESTONE TABLES AFTER RENDER ── */
+(function(){
+  function normCity(t){
+    const s = String(t||'').toUpperCase();
+    if(s.includes('MADINAH')) return 'MADINAH';
+    if(s.includes('JEDDAH')) return 'JEDDAH';
+    if(s.includes('MAKKAH')) return 'MAKKAH';
+    if(s.includes('ABHA')) return 'ABHA';
+    if(s.includes('JIZAN')) return 'JIZAN';
+    return '';
+  }
+
+  function makeFixedTable(title, city, stream){
+    if(typeof fixedMilestoneRowsForCity !== 'function' || typeof milestoneMiniTable !== 'function') return '';
+    const rows = fixedMilestoneRowsForCity(city, stream);
+    if(!rows.length) return '';
+    return `<div style="margin-top:8px;" class="fixed-ms-block">
+      <div class="city-section-title">${title}</div>
+      <div class="date-pair-grid">${milestoneMiniTable(rows)}</div>
+    </div>`;
+  }
+
+  window.applyFixedMilestoneTables = function(){
+    document.querySelectorAll('#overviewCharts .city-card').forEach(card=>{
+      const title = card.querySelector('.city-hdr-info h3, h3');
+      const city = normCity(title ? title.textContent : '');
+      if(!city) return;
+      const body = card.querySelector('.city-body');
+      if(!body) return;
+
+      // remove any old milestone sections
+      body.querySelectorAll('.fixed-ms-block').forEach(x=>x.remove());
+
+      // If existing blocks show dash or are missing, remove and replace.
+      const sectionTitles = Array.from(body.querySelectorAll('.city-section-title'));
+      sectionTitles.forEach(st=>{
+        const txt = String(st.textContent||'').toUpperCase();
+        if(txt.includes('UPSTREAM MILESTONES') || txt.includes('DOWNSTREAM MILESTONES')){
+          const parent = st.parentElement;
+          if(parent && parent !== body) parent.remove();
+        }
+      });
+
+      body.insertAdjacentHTML('beforeend',
+        makeFixedTable('🔵 UPSTREAM MILESTONES', city, 'upstream') +
+        makeFixedTable('🟣 DOWNSTREAM MILESTONES', city, 'downstream')
+      );
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', function(){
+    setTimeout(window.applyFixedMilestoneTables, 300);
+    setTimeout(window.applyFixedMilestoneTables, 1200);
+  });
+
+  ['renderDashboard','renderAll','initDashboard','buildOverviewCharts'].forEach(fn=>{
+    if(typeof window[fn] === 'function' && !window[fn].__fixedMsHook){
+      const old = window[fn];
+      window[fn] = function(){
+        const r = old.apply(this, arguments);
+        setTimeout(window.applyFixedMilestoneTables, 100);
+        return r;
+      };
+      window[fn].__fixedMsHook = true;
+    }
+  });
 })();
 </script>
 
