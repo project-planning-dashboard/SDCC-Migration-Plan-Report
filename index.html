@@ -1151,6 +1151,64 @@ button[onclick*="switchTab('matrix'"]{display:none!important;}
   display:none!important;
 }
 
+
+/* ── FINAL GUARANTEED OVERVIEW DATA RENDER ── */
+#overviewCharts .overview-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:12px!important;
+  align-items:start!important;
+}
+.final-ms-block{margin-top:8px!important;}
+.final-ms-block .date-pair-grid{display:block!important;}
+.final-ms-block .milestone-compact{display:block!important;width:100%!important;margin-bottom:8px!important;}
+.final-ms-block .milestone-compact table{width:100%!important;table-layout:fixed!important;border-collapse:collapse!important;}
+.final-ms-block .milestone-compact th,
+.final-ms-block .milestone-compact td{white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;}
+.final-bam-grid{
+  display:grid!important;
+  grid-template-columns:repeat(5,minmax(0,1fr))!important;
+  gap:10px!important;
+  width:100%!important;
+}
+.final-bam-card{
+  background:#fff;
+  border:1.5px solid var(--border);
+  border-radius:var(--r);
+  overflow:hidden;
+  box-shadow:var(--sh-sm);
+  min-width:0;
+}
+.final-bam-card table{
+  width:100%;
+  table-layout:fixed;
+  border-collapse:collapse;
+  font-size:10px;
+}
+.final-bam-card th{
+  background:var(--ab-xlt);
+  color:var(--ab);
+  padding:5px 2px;
+  font-size:7.5px;
+  text-transform:uppercase;
+  white-space:nowrap;
+}
+.final-bam-card td{
+  padding:5px 2px;
+  text-align:center;
+  border-bottom:1px solid var(--border);
+  white-space:nowrap;
+}
+.final-bam-card .batch-cell{text-align:left;font-weight:800;font-size:10px;padding-left:4px;}
+.final-bam-card .ss{font-size:7px;color:var(--text-faint);font-weight:400;}
+@media(max-width:1500px){
+  #overviewCharts .overview-grid,.final-bam-grid{
+    grid-template-columns:repeat(5,300px)!important;
+    overflow-x:auto!important;
+    padding-bottom:8px!important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -3388,6 +3446,134 @@ document.addEventListener('DOMContentLoaded', initDashboard);
 
     setTimeout(silentLoadExcel, 200);
   });
+})();
+</script>
+
+
+<script>
+/* ── FINAL GUARANTEED DATA RENDERER ── */
+(function(){
+  const CITY_ORDER_FINAL = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+  const CITY_ICONS_FINAL = {MADINAH:'🕌',JEDDAH:'🏙️',MAKKAH:'🕋',ABHA:'🌿',JIZAN:'🌊'};
+  const CITY_COLORS_FINAL = {MADINAH:'#0060B5',JEDDAH:'#E87722',MAKKAH:'#DC2626',ABHA:'#16A34A',JIZAN:'#7C3AED'};
+
+  const FIXED_MS = {
+    MADINAH:{up:[['E2E','2026-09-03','2026-09-03'],['SAT','2026-09-10','2026-09-10'],['Live On','2026-09-15','2026-09-15']],dn:[['E2E','2026-12-28','2026-12-28'],['SAT','2027-01-04','2027-01-04'],['Live On','2026-12-30','2026-12-30']]},
+    JEDDAH:{up:[['E2E','2026-10-20','2026-10-20'],['SAT','2026-10-15','2026-10-15'],['Live On','2026-10-25','2026-10-25']],dn:[['E2E','2027-02-11','2027-02-11'],['SAT','2027-02-18','2027-02-18'],['Live On','2027-02-15','2027-02-15']]},
+    MAKKAH:{up:[['E2E','2026-09-28','2026-09-28'],['SAT','2026-10-04','2026-10-04'],['Live On','2026-10-07','2026-10-07']],dn:[['E2E','2027-01-21','2027-01-21'],['SAT','2027-01-26','2027-01-26'],['Live On','2027-01-23','2027-01-23']]},
+    ABHA:{up:[['E2E','2026-09-08','2026-09-08'],['SAT','2026-09-10','2026-09-10'],['Live On','2026-09-15','2026-09-15']],dn:[['E2E','2026-12-24','2026-12-31'],['SAT','2027-01-10','2027-01-10'],['Live On','2027-01-05','2027-01-05']]},
+    JIZAN:{up:[['E2E','2026-09-03','2026-09-03'],['SAT','2026-09-07','2026-09-07'],['Live On','2026-09-15','2026-09-15']],dn:[['E2E','2027-01-04','2026-12-28'],['SAT','2027-01-10','2027-01-11'],['Live On','2027-01-05','2027-01-12']]}
+  };
+
+  function d(v){ const x = new Date(v); return isNaN(x) ? null : x; }
+  function fmt(v){ const x=d(v); return x ? x.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'2-digit'}).replace(',','') : '—'; }
+  function diff(p,e){ const a=d(p), b=d(e); if(!a||!b) return null; return Math.round((b-a)/86400000); }
+  function varCell(p,e){ const v=diff(p,e); if(v===null) return '<td class="ms-var">—</td>'; const cls=v>0?'var-late':'var-zero'; return `<td class="ms-var ${cls}">${v>0?'+':''}${v}d</td>`; }
+  function msRow(x){ return `<tr><td class="ms-name">${x[0]}</td><td class="ms-date">${fmt(x[1])}</td><td class="ms-date">${fmt(x[2])}</td>${varCell(x[1],x[2])}</tr>`; }
+  function msTable(title, rows){
+    return `<div class="final-ms-block"><div class="city-section-title">${title}</div><div class="date-pair-grid"><div class="milestone-compact"><table><thead><tr><th>Item</th><th>Plan</th><th>Expected</th><th>Var.</th></tr></thead><tbody>${rows.map(msRow).join('')}</tbody></table></div></div></div>`;
+  }
+  function norm(v){ return String(v||'').trim(); }
+  function statusOfFinal(r){
+    const s=norm(r.status||r.Status).toLowerCase();
+    if(s.includes('complete')||s==='done') return 'Completed';
+    if(s.includes('progress')) return 'In Progress';
+    if(s.includes('delay')) return 'Delayed';
+    return 'Not Started';
+  }
+  function rows(city){
+    const data = window.currentData || window.WORKBOOK_DATA || {};
+    const c = data.cities || {};
+    return c[city] || c[city.toUpperCase()] || [];
+  }
+  function wbsName(r){
+    const t = `${r.activity||''} ${r.act_type||''} ${r.batch_label||''}`.toUpperCase();
+    if(t.includes('MIGRATION')||t.includes('ALARM')||t.includes('REPORTING')||t.includes('UI')||t.includes('DISPLAY')||t.includes('HISTORIAN')) return 'MIGRATION';
+    if(t.includes('ESB')||t.includes('INTEGRATION')||t.includes('DNMC')) return 'INTEGRATION';
+    if(t.includes('SAT') && t.includes('UPSTREAM')) return 'UPSTREAM SAT';
+    if((t.includes('CUTOVER')||t.includes('CUTTOVER')||t.includes('LIVE')) && t.includes('UPSTREAM')) return 'CUTOVER LIVE ON';
+    if(t.includes('TRAINING')) return 'TRAINING';
+    if(t.includes('DERMS')) return 'DERMS';
+    if(t.includes('SAT') && (t.includes('DOWNSTREAM')||t.includes('DOWSTREAM'))) return 'DOWNSTREAM SAT';
+    return 'UPSTREAM';
+  }
+  function stat(list){
+    const total=list.length;
+    const done=list.filter(r=>statusOfFinal(r)==='Completed').length;
+    const inprog=list.filter(r=>statusOfFinal(r)==='In Progress').length;
+    const delayed=list.filter(r=>statusOfFinal(r)==='Delayed').length;
+    const notstart=Math.max(0,total-done-inprog-delayed);
+    const pct=total?Math.round(done/total*100):0;
+    return {total,done,inprog,notstart,delayed,pct};
+  }
+  function catLine(label, list){
+    const s=stat(list);
+    return `<div class="cat-line">
+      <div class="cat-line-head"><div class="cat-title">${label}</div><div class="cat-pct">${s.pct}%</div></div>
+      <div class="cat-kpis">
+        <div class="cat-kpi total"><span class="kpi-icon">📋</span><span class="kpi-count">${s.total}</span><span class="kpi-label">Total</span></div>
+        <div class="cat-kpi done"><span class="kpi-icon">✅</span><span class="kpi-count">${s.done}</span><span class="kpi-label">Done</span></div>
+        <div class="cat-kpi inprog"><span class="kpi-icon">🔄</span><span class="kpi-count">${s.inprog}</span><span class="kpi-label">Prog.</span></div>
+        <div class="cat-kpi notstart"><span class="kpi-icon">⏳</span><span class="kpi-count">${s.notstart}</span><span class="kpi-label">Not Start</span></div>
+        <div class="cat-kpi delayed"><span class="kpi-icon">🚨</span><span class="kpi-count">${s.delayed}</span><span class="kpi-label">Delayed</span></div>
+      </div>
+      <div class="cat-progress"><div class="cat-progress-fill" style="width:${s.pct}%"></div></div>
+    </div>`;
+  }
+  function cityCard(city){
+    const r=rows(city);
+    const s=stat(r.filter(x=>norm(x.status||x.Status)));
+    const col=CITY_COLORS_FINAL[city], icon=CITY_ICONS_FINAL[city];
+    const cats=['UPSTREAM','MIGRATION','INTEGRATION','UPSTREAM SAT','CUTOVER LIVE ON','TRAINING','DERMS','DOWNSTREAM SAT'];
+    return `<div class="city-card" style="border-top:3px solid ${col};">
+      <div class="city-hdr" style="background:linear-gradient(135deg,${col},#0060B5);">
+        <div class="city-hdr-row"><div class="city-icon">${icon}</div><div class="city-hdr-info"><h3>${city}</h3><div class="city-sub">All city activities</div></div><div class="city-overall-pct">${s.pct}%</div></div>
+        <div class="prog-bar-wrap" style="margin-top:10px;background:rgba(255,255,255,.2);"><div class="prog-bar" style="width:${s.pct}%;background:#fff;opacity:.9;"></div></div>
+      </div>
+      <div class="city-body">
+        <div class="city-section-title">📊 ACTIVITY STATUS BY WORKSTREAM</div>
+        <div class="cat-status-wrap">${cats.map(c=>catLine(c, r.filter(x=>wbsName(x)===c))).join('')}</div>
+        ${msTable('🔵 UPSTREAM MILESTONES', FIXED_MS[city].up)}
+        ${msTable('🟣 DOWNSTREAM MILESTONES', FIXED_MS[city].dn)}
+      </div>
+    </div>`;
+  }
+  function batchNo(r){ return norm(r.batch_no||r.batch_label||'').match(/(\d+)/)?.[1] || ''; }
+  function bamCard(city){
+    const r=rows(city).filter(x=>x.batch_no);
+    const batches=[...new Set(r.map(x=>x.batch_no).filter(Boolean))].sort((a,b)=>(batchNo({batch_no:a})||0)-(batchNo({batch_no:b})||0));
+    const col=CITY_COLORS_FINAL[city], icon=CITY_ICONS_FINAL[city];
+    const types=[['SLD Submission','SLD Sub'],['SLD Validation','SLD Val'],['E2E for Grid SS','E2E'],['E2E Rectification','Rect.'],['Cutover','Cutover']];
+    const body=batches.map(b=>{
+      const br=r.filter(x=>x.batch_no===b);
+      const done=br.filter(x=>statusOfFinal(x)==='Completed').length;
+      const pct=br.length?Math.round(done/br.length*100):0;
+      const ss=(b.match(/\(([^)]+)\)/)||[])[1]||'';
+      return `<tr><td class="batch-cell">${b.replace(/\s*\([^)]*\)/,'').replace('Batch ','B')} <span class="ss">${ss}</span></td><td><b style="color:var(--ab)">${pct}%</b></td>${types.map(([key])=>{
+        const row=br.find(x=>String(x.act_type||'')===key);
+        return `<td>${row?({'Completed':'✅','In Progress':'🔄','Delayed':'🚨','Not Started':'⏳'}[statusOfFinal(row)]||'⏳'):'➖'}</td>`;
+      }).join('')}</tr>`;
+    }).join('');
+    return `<div class="final-bam-card"><div class="bam-city-hdr" style="background:linear-gradient(135deg,${col},#0060B5);"><span class="bam-hdr-icon">${icon}</span><div><div class="bam-city-name">${city} — Upstream Progress</div><div class="bam-city-sub">${batches.length} batches</div></div></div><table><thead><tr><th>Batch</th><th>%</th>${types.map(x=>`<th>${x[1]}</th>`).join('')}</tr></thead><tbody>${body}</tbody></table></div>`;
+  }
+  function delayedCards(){
+    return CITY_ORDER_FINAL.map(city=>{
+      const d=rows(city).filter(r=>statusOfFinal(r)==='Delayed').slice(0,5);
+      return `<div class="delayed-city-card"><div class="delayed-city-hdr"><span>${CITY_ICONS_FINAL[city]}</span><h3 style="color:${CITY_COLORS_FINAL[city]}">${city}</h3><span class="delayed-count-pill">${d.length}</span></div>${d.length?d.map(r=>`<div class="delayed-item"><div class="delayed-item-name">${r.activity||'—'}</div><div class="delayed-item-meta"><span>Batch: <b>${r.batch_no||r.batch_label||'—'}</b></span><span>Pl.Fin: <b>${r.planned_finish||'—'}</b></span><span>Exp.Fin: <b>${r.exp_finish||'—'}</b></span></div></div>`).join(''):'<div class="delayed-empty">✅ No delayed activities</div>'}</div>`;
+    }).join('');
+  }
+  function renderFinalOverview(){
+    const el=document.getElementById('overviewCharts');
+    if(!el) return;
+    el.innerHTML = `
+      <div class="overview-section"><div class="overview-grid">${CITY_ORDER_FINAL.map(cityCard).join('')}</div></div>
+      <div class="section-hdr" style="margin-top:18px;"><div class="icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div><h2>BATCH ACTIVITY MATRIX</h2><div class="hdr-sub">Upstream activity status by batch</div></div></div>
+      <div class="overview-section"><div class="final-bam-grid">${CITY_ORDER_FINAL.map(bamCard).join('')}</div></div>
+      <div class="section-hdr" style="margin-top:18px;"><div class="icon" style="background:var(--crit);"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/></svg></div><div><h2>DELAYED ACTIVITIES BY CITY</h2><div class="hdr-sub">Status = Delayed only</div></div></div>
+      <div class="overview-section"><div class="delayed-city-grid">${delayedCards()}</div></div>`;
+  }
+  window.renderFinalOverview = renderFinalOverview;
+  document.addEventListener('DOMContentLoaded',()=>{setTimeout(renderFinalOverview,500);setTimeout(renderFinalOverview,1500);});
 })();
 </script>
 
