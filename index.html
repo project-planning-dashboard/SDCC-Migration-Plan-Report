@@ -2701,7 +2701,10 @@ function isHiddenRow(r){
   return r.hidden === true || r.__hidden === true || r.rowHidden === true || r._hidden === true || String(r.hidden||'').toLowerCase() === 'true';
 }
 function visibleRows(rows){
-  return (rows || []).filter(r => !isHiddenRow(r));
+  // Single criteria for the whole dashboard:
+  // count/render only rows that have a valid mapped Workstream.
+  // This removes blank/unmapped rows from KPIs, city cards, tabs and matrices.
+  return (rows || []).filter(r => !isHiddenRow(r) && !!categoryOfRow(r));
 }
 function validStatusRows(rows){
   return visibleRows(rows).filter(r => !!statusOf(r));
@@ -2905,39 +2908,102 @@ function statusRowsBlock(title, st, col){
 }
 
 
+const VALID_WORKSTREAM_ORDER = ['Upstream','Upstream SAT','Training','Migration','Live On - Upstream','DERMS','Downstream','Downstream SAT','ESB'];
+
 function workstreamKey(v){
-  const s = String(v||'').trim().replace(/Dowstream/gi,'Downstream');
-  return s || 'Other';
+  const raw = String(v||'').trim();
+  if(!raw || raw === '—' || raw === '-' || raw.toLowerCase() === 'n/a') return null;
+
+  const s = raw
+    .replace(/\s+/g,' ')
+    .replace(/Dowstream/gi,'Downstream')
+    .replace(/Down Stream/gi,'Downstream')
+    .trim();
+
+  const norm = s.toLowerCase()
+    .replace(/[^a-z0-9]+/g,' ')
+    .trim();
+
+  const aliases = {
+    'upstream': 'Upstream',
+    'upstream sat': 'Upstream SAT',
+    'training': 'Training',
+    'migration': 'Migration',
+    'live on': 'Live On - Upstream',
+    'live on upstream': 'Live On - Upstream',
+    'liveon upstream': 'Live On - Upstream',
+    'derms': 'DERMS',
+    'downstream': 'Downstream',
+    'downstream sat': 'Downstream SAT',
+    'esb': 'ESB'
+  };
+
+  return aliases[norm] || null;
 }
 
 function categoryOfRow(r){
   // Workstream status cards must be counted directly from the Excel Workstream column.
+  // Do not create "Other"; ignore blank/unmapped values.
   return workstreamKey(r.workstream);
 }
 
+function sanitizeDashboardData(data){
+  data = data || {cities:{}, batch_progress:{}, batch_ss:{}};
+  const cityNames = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+  const out = {cities:{}, batch_progress:{}, batch_ss:{}};
+
+  for(const city of cityNames){
+    const rawRows = (data.cities && data.cities[city]) || [];
+    const cleanRows = rawRows
+      .filter(r => !isHiddenRow(r) && !!categoryOfRow(r))
+      .map(r => ({...r, workstream: categoryOfRow(r)}));
+
+    out.cities[city] = cleanRows;
+    out.batch_ss[city] = {};
+
+    cleanRows.forEach(r => {
+      if(r.batch_no){
+        const m = String(r.batch_label || '').match(/\(([^)]*SS)\)/i);
+        out.batch_ss[city][r.batch_no] = m ? m[1] : ((data.batch_ss && data.batch_ss[city] && data.batch_ss[city][r.batch_no]) || '');
+      }
+    });
+
+    const batches = [...new Set(cleanRows.map(r => r.batch_no).filter(Boolean))].sort();
+    out.batch_progress[city] = batches.map(batch => {
+      const bRows = cleanRows.filter(r => r.batch_no === batch);
+      const byType = type => bRows.find(r => String(r.act_type || '').trim() === type);
+      const pctOf = row => row ? Math.round((Number(row.progress || 0) * 100)) : 0;
+      const done = bRows.filter(r => statusOf(r) === 'Completed').length;
+      const completed = bRows.length ? Math.round(done / bRows.length * 100) : 0;
+      return {
+        batch,
+        planned: 0,
+        completed,
+        sld_sub: pctOf(byType('SLD Submission')),
+        sld_val: pctOf(byType('SLD Validation')),
+        e2e: pctOf(byType('E2E for Grid SS')),
+        e2e_rect: pctOf(byType('E2E Rectification')),
+        cutover: pctOf(byType('Cutover')),
+        ss: out.batch_ss[city][batch] || ''
+      };
+    });
+  }
+  return out;
+}
+
 function categoryStats(rows, category){
-  const key = workstreamKey(category).toLowerCase();
-  return activityStats(visibleRows(rows).filter(r => workstreamKey(r.workstream).toLowerCase() === key));
+  const key = workstreamKey(category);
+  if(!key) return activityStats([]);
+  return activityStats(visibleRows(rows).filter(r => workstreamKey(r.workstream) === key));
 }
 
 function workstreamOrderForRows(rows){
-  const preferred = ['Upstream','Upstream SAT','Training','Migration','Live On - Upstream','DERMS','Downstream','Downstream SAT','ESB'];
-  const seen = new Set();
-  const available = [];
+  const available = new Set();
   for(const r of visibleRows(rows||[])){
     const ws = workstreamKey(r.workstream);
-    if(!seen.has(ws)){
-      seen.add(ws);
-      available.push(ws);
-    }
+    if(ws) available.add(ws);
   }
-  const ordered = [];
-  for(const p of preferred){
-    const found = available.find(x => x.toLowerCase() === p.toLowerCase());
-    if(found && !ordered.includes(found)) ordered.push(found);
-  }
-  for(const x of available){ if(!ordered.includes(x)) ordered.push(x); }
-  return ordered;
+  return VALID_WORKSTREAM_ORDER.filter(ws => available.has(ws));
 }
 
 function categoryProgressLine(label, st, col){
@@ -3363,10 +3429,10 @@ function buildActivityMatrix(){
   const bss = data.batch_ss;
 
   let html = '';
-  const cityBatchCounts = cityNames.map(c=>[...new Set(((data.cities[c]||[]).filter(r=>r.batch_no)).map(r=>r.batch_no))].filter(Boolean).length);
+  const cityBatchCounts = cityNames.map(c=>[...new Set((visibleRows(data.cities[c]||[]).filter(r=>r.batch_no)).map(r=>r.batch_no))].filter(Boolean).length);
   const maxBatchRows = Math.max(10, ...cityBatchCounts);
   for(const city of cityNames){
-    const rows = (data.cities[city]||[]).filter(r=>r.batch_no);
+    const rows = visibleRows(data.cities[city]||[]).filter(r=>r.batch_no);
     const col  = CITY_COLORS[city]||'#0060B5';
     const icon = CITY_ICONS[city]||'🏙️';
     const ssMap = bss[city]||{};
@@ -3860,7 +3926,7 @@ function parseXlsxBuffer(buffer){
 }
 
 function applyWorkbookData(data, sourceLabel){
-  currentData = data;
+  currentData = sanitizeDashboardData(data);
   const chip = document.getElementById('dataSourceChip');
   const lbl  = document.getElementById('dataSourceLabel');
   if(chip){ chip.style.display = 'flex'; }
@@ -4182,7 +4248,8 @@ function initDashboard(){
     'Updated ' + now.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
 
   // Step 1: Render immediately with embedded data so dashboard is never blank.
-  // currentData is already set to FINAL_PARSED_EXCEL_DATA (embedded snapshot).
+  // Apply the same valid-workstream criteria before any KPI/count is calculated.
+  currentData = sanitizeDashboardData(currentData);
   renderAll();
   const lbl0 = document.getElementById('dataSourceLabel'); if(lbl0) lbl0.textContent = 'Embedded latest Excel data';
 
