@@ -2571,7 +2571,7 @@ function getActStatusIcon(status){
 // ──────────────────────────────────────────────────────────
 function buildKPIs(){
   const data = currentData;
-  let total=0,done=0,inprog=0,notstart=0,delayed=0,plannedDue=0;
+  let total=0,done=0,inprog=0,notstart=0,delayed=0,plannedSum=0,actualSum=0;
   const today = new Date();
   today.setHours(23,59,59,999);
   const cities = data.cities || {};
@@ -2582,27 +2582,25 @@ function buildKPIs(){
     inprog += rows.filter(r=>statusOf(r)==='In Progress').length;
     notstart += rows.filter(r=>statusOf(r)==='Not Started').length;
     delayed += rows.filter(r=>statusOf(r)==='Delayed').length;
-    plannedDue += rows.filter(r=>{
-      const d = parseDateValue(r.planned_finish);
-      return d && d.getTime() <= today.getTime();
-    }).length;
+    plannedSum += rows.reduce((s,r)=>s + plannedProgressPercent(r, today), 0);
+    actualSum += rows.reduce((s,r)=>s + actualProgressPercent(r), 0);
   }
-  const plannedPct = total>0 ? Math.round((plannedDue/total)*100) : 0;
-  const actualPct = total>0 ? Math.round((done/total)*100) : 0;
+  const plannedPct = total>0 ? Math.round(plannedSum/total) : 0;
+  const actualPct = total>0 ? Math.round(actualSum/total) : 0;
   const spi = plannedPct>0 ? (actualPct/plannedPct) : (actualPct>0 ? 1 : 0);
   const spiTxt = spi ? spi.toFixed(2) : '0.00';
   const spiColor = spi>=1 ? 'var(--success)' : spi>=0.85 ? 'var(--warn)' : 'var(--crit)';
   const plannedVsActual = Math.max(plannedPct, actualPct, 1);
 
   const kpis = [
-    {accent:'var(--ab)', icon:'📅', val:plannedPct+'%', lbl:'Planned %', sub:plannedDue+' planned activities due', bar:plannedPct},
-    {accent:'var(--success)', icon:'✅', val:actualPct+'%', lbl:'Actual %', sub:done+' completed activities', bar:actualPct},
-    {accent:spiColor, icon:'📈', val:spiTxt, lbl:'SPI', sub:(spi>=1?'Ahead / On plan':'Behind plan'), bar:Math.min(Math.round(spi*100),100)},
-    {accent:'var(--ab)', icon:'📋', val:total, lbl:'Total Activities', sub:'Latest Excel activity count', bar:100},
-    {accent:'var(--success)', icon:'✓', val:done, lbl:'Completed', sub:actualPct+'% of total scope', bar:actualPct},
-    {accent:'var(--warn)', icon:'↻', val:inprog, lbl:'In Progress', sub:'Currently active', bar:total?Math.round(inprog/total*100):0},
-    {accent:'var(--text-muted)', icon:'⏳', val:notstart, lbl:'Not Started', sub:'Remaining to start', bar:total?Math.round(notstart/total*100):0},
-    {accent:'var(--crit)', icon:'!', val:delayed, lbl:'Delayed', sub:'Requires management attention', bar:total?Math.round(delayed/total*100):0}
+    {accent:'var(--ab)', icon:'📅', val:plannedPct+'%', lbl:'Planned %', sub:'Time-elapsed planned progress', bar:plannedPct},
+    {accent:'var(--success)', icon:'✅', val:actualPct+'%', lbl:'Actual %', sub:'Average actual progress incl. In Progress', bar:actualPct},
+    {accent:spiColor, icon:'📈', val:spiTxt, lbl:'SPI', sub:(spi>=1?'Ahead / On plan':''), bar:Math.min(Math.round(spi*100),100)},
+    {accent:'var(--ab)', icon:'📋', val:total, lbl:'Total Activities', sub:'', bar:100},
+    {accent:'var(--success)', icon:'✓', val:done, lbl:'Completed', sub:'', bar:actualPct},
+    {accent:'var(--warn)', icon:'↻', val:inprog, lbl:'In Progress', sub:'', bar:total?Math.round(inprog/total*100):0},
+    {accent:'var(--text-muted)', icon:'⏳', val:notstart, lbl:'Not Started', sub:'', bar:total?Math.round(notstart/total*100):0},
+    {accent:'var(--crit)', icon:'!', val:delayed, lbl:'Delayed', sub:'', bar:total?Math.round(delayed/total*100):0}
   ];
 
   const grid = document.getElementById('kpiGrid');
@@ -2711,15 +2709,46 @@ function validStatusRows(rows){
 }
 
 function activityStats(rows){
-  // Counts must come from Status column only. Do not infer status from progress or dates.
+  // Counts still come from Status column, but progress % is calculated from actual progress values.
   const list = validStatusRows(rows);
   const total = list.length;
   const done = list.filter(r=>statusOf(r)==='Completed').length;
   const inprog = list.filter(r=>statusOf(r)==='In Progress').length;
   const notstart = list.filter(r=>statusOf(r)==='Not Started').length;
   const delayed = list.filter(r=>statusOf(r)==='Delayed').length;
-  const pct = total>0 ? Math.round((done/total)*100) : 0;
+  const actualSum = list.reduce((s,r)=>s + actualProgressPercent(r), 0);
+  const pct = total>0 ? Math.round(actualSum/total) : 0;
   return {total,done,inprog,notstart,delayed,pct};
+}
+
+function clampPct(n){
+  n = Number(n);
+  if(!isFinite(n)) return 0;
+  return Math.max(0, Math.min(100, n));
+}
+
+function actualProgressPercent(r){
+  const p = progressPercent(r);
+  if(p !== null && p !== undefined) return clampPct(p);
+  return statusOf(r) === 'Completed' ? 100 : 0;
+}
+
+function plannedProgressPercent(r, asOfDate){
+  // Planned % is calculated as time-elapsed between Planned Start and Planned Finish.
+  // Before planned start = 0%, after planned finish = 100%, between them = partial planned progress.
+  const today = asOfDate || new Date();
+  const ps = parseDateValue(r && r.planned_start);
+  const pf = parseDateValue(r && r.planned_finish);
+  if(!ps && !pf) return statusOf(r) === 'Completed' ? 100 : 0;
+  if(!ps && pf) return today.getTime() >= pf.getTime() ? 100 : 0;
+  if(ps && !pf) return today.getTime() >= ps.getTime() ? 1 : 0;
+  const start = ps.getTime();
+  const finish = pf.getTime();
+  const now = today.getTime();
+  if(now < start) return 0;
+  if(now >= finish) return 100;
+  if(finish <= start) return now >= finish ? 100 : 0;
+  return clampPct(((now - start) / (finish - start)) * 100);
 }
 
 function isIntegrationRow(r){
@@ -2972,12 +3001,12 @@ function sanitizeDashboardData(data){
     out.batch_progress[city] = batches.map(batch => {
       const bRows = cleanRows.filter(r => r.batch_no === batch);
       const byType = type => bRows.find(r => String(r.act_type || '').trim() === type);
-      const pctOf = row => row ? Math.round((Number(row.progress || 0) * 100)) : 0;
-      const done = bRows.filter(r => statusOf(r) === 'Completed').length;
-      const completed = bRows.length ? Math.round(done / bRows.length * 100) : 0;
+      const pctOf = row => row ? actualProgressPercent(row) : 0;
+      const completed = bRows.length ? Math.round(bRows.reduce((s,r)=>s + actualProgressPercent(r),0) / bRows.length) : 0;
+      const planned = bRows.length ? Math.round(bRows.reduce((s,r)=>s + plannedProgressPercent(r),0) / bRows.length) : 0;
       return {
         batch,
-        planned: 0,
+        planned,
         completed,
         sld_sub: pctOf(byType('SLD Submission')),
         sld_val: pctOf(byType('SLD Validation')),
@@ -3008,7 +3037,7 @@ function workstreamOrderForRows(rows){
 
 function categoryProgressLine(label, st, col){
   st = st || {total:0,done:0,inprog:0,notstart:0,delayed:0};
-  const pct = st.total ? Math.round((st.done/st.total)*100) : 0;
+  const pct = st.pct || 0;
   return `
     <div class="cat-line">
       <div class="cat-line-head">
@@ -3228,7 +3257,7 @@ function buildCityCards(){
     const inprog = upstream.filter(r=>statusOf(r)==='In Progress').length;
     const notstart = upstream.filter(r=>statusOf(r)==='Not Started').length;
     const delayed = upstream.filter(r=>statusOf(r)==='Delayed').length;
-    const pct = total>0 ? Math.round((done/total)*100):0;
+    const pct = total>0 ? Math.round(upstream.reduce((s,r)=>s + actualProgressPercent(r),0)/total) : 0;
     
     // Batch status from progress summary
     const batches = bprog[city]||[];
@@ -3957,7 +3986,7 @@ function loadFromGitHub(){
     .catch(function(err){
       console.warn('GitHub Excel fetch failed:', err.message);
       showDataBanner(
-        'Cannot load <b>data.xlsx</b>. Ensure data.xlsx is placed beside the HTML file on GitHub.<br><small>' + err.message + '</small>',
+        'Cannot load <b>data.xlsx</b>. Ensure data.xlsx is placed beside the HTML file on GitHub.<br>',
         true
       );
     });
