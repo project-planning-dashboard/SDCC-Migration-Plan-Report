@@ -2515,6 +2515,86 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
   margin-top:3px!important;
 }
 
+
+/* ── COMPACT EXECUTIVE KPI HEIGHT ── */
+.exec-summary-grid{
+  gap:12px!important;
+  margin-bottom:18px!important;
+  align-items:stretch!important;
+}
+.exec-summary-card{
+  padding:13px 14px 12px!important;
+  min-height:218px!important;
+  height:auto!important;
+  border-radius:15px!important;
+}
+.exec-summary-card::after{
+  width:78px!important;
+  height:78px!important;
+  right:-32px!important;
+  top:-32px!important;
+}
+.exec-summary-icon{
+  width:34px!important;
+  height:34px!important;
+  border-radius:11px!important;
+  font-size:16px!important;
+  margin-bottom:7px!important;
+}
+.exec-summary-val{
+  font-size:27px!important;
+}
+.exec-summary-lbl{
+  margin-top:4px!important;
+  font-size:10.5px!important;
+}
+.exec-summary-sub{
+  margin-top:7px!important;
+  font-size:10px!important;
+}
+.exec-summary-mini{
+  margin-top:8px!important;
+  height:6px!important;
+}
+.exec-summary-card-delayed{
+  padding:12px 12px 10px!important;
+}
+.exec-summary-card-delayed .exec-summary-icon{
+  margin-bottom:4px!important;
+}
+.exec-summary-card-delayed .exec-summary-lbl{
+  margin-top:3px!important;
+  margin-bottom:3px!important;
+}
+.delayed-kpi-breakdown{
+  gap:3px!important;
+  margin:4px 0 5px!important;
+}
+.delayed-bar-row{
+  grid-template-columns:46px minmax(0,1fr) 18px!important;
+  gap:4px!important;
+  min-height:15px!important;
+}
+.delayed-city-name{
+  font-size:7.6px!important;
+}
+.delayed-bar-track{
+  height:6px!important;
+}
+.delayed-city-count{
+  min-width:16px!important;
+  height:16px!important;
+  border-radius:5px!important;
+  font-size:8.5px!important;
+  padding:0 3px!important;
+}
+.exec-summary-card-delayed .exec-summary-mini{
+  margin-top:2px!important;
+}
+@media(max-width:1600px){
+  .exec-summary-card{min-height:225px!important;height:auto!important;}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -4837,7 +4917,30 @@ function sanitizeDashboardData(data){
   for(const city of cityNames){
     const cleanRows = ((data.cities && data.cities[city]) || [])
       .filter(r => !isHiddenRow(r) && !!categoryOfRow(r) && !!String(r.activity||'').trim())
-      .map(r => ({...r,city,workstream:categoryOfRow(r)}));
+      .map(r => {
+        // The workbook uses shared columns named "Actual Start / Expected Start"
+        // and "Actual Finish / Expected Finish" for the latest updated dates.
+        // When these contain valid dates, they must override the older Expected columns.
+        const latestStartDate = parseDateValue(r.actual_start);
+        const latestFinishDate = parseDateValue(r.actual_finish);
+        const expStart = latestStartDate ? latestStartDate.toISOString().slice(0,10) : r.exp_start;
+        const expFinish = latestFinishDate ? latestFinishDate.toISOString().slice(0,10) : r.exp_finish;
+        const plannedFinishDate = parseDateValue(r.planned_finish);
+        const effectiveFinishDate = parseDateValue(expFinish);
+        let effectiveDelay = null;
+        if(plannedFinishDate && effectiveFinishDate){
+          const days = Math.round((effectiveFinishDate.getTime()-plannedFinishDate.getTime())/86400000);
+          if(days>0) effectiveDelay = days;
+        }
+        return {
+          ...r,
+          city,
+          workstream:categoryOfRow(r),
+          exp_start:expStart,
+          exp_finish:expFinish,
+          delay_days:effectiveDelay
+        };
+      });
     out.cities[city] = cleanRows;
     out.batch_ss[city] = {};
     out.downstream_batch_ss[city] = {};
@@ -4868,8 +4971,10 @@ function sanitizeDashboardData(data){
           const src = supplied[stream] && supplied[stream][key];
           const calc = recalculated[stream][key];
           merged[stream][key] = {
-            planned_finish: (src && src.planned_finish) || calc.planned_finish,
-            exp_finish: (src && src.exp_finish) || calc.exp_finish,
+            // Always prefer the latest dates recalculated from the city detail sheets.
+            // Fall back to Summary Dates only when the detailed rows do not provide a date.
+            planned_finish: calc.planned_finish || (src && src.planned_finish) || null,
+            exp_finish: calc.exp_finish || (src && src.exp_finish) || null,
             progress: calc.progress
           };
         });
@@ -4966,8 +5071,21 @@ function parseXlsxBuffer(buffer){
       if(!activity||!mappedWs||/^activity$/i.test(activity)||/^\s*-\s*upstream\s*$/i.test(activity))continue;
       const hidden=!!(ws['!rows']&&ws['!rows'][r]&&ws['!rows'][r].hidden);if(hidden)continue;
       const p=progress(cell(ws,r,C.progress));let bn='';const helpers=[];for(let c=Math.max(range.s.c,range.e.c-10);c<=range.e.c;c++){const v=cell(ws,r,c);helpers.push(v);const s=clean(v);if(/^Batch\s*\d+/i.test(s))bn='Batch '+String(parseInt(s.match(/\d+/)[0],10)).padStart(2,'0');}if(!bn)bn=batchNo(currentGroup);
-      const pf=fmtD(cell(ws,r,C.plannedFinish)),ef=fmtD(cell(ws,r,C.expectedFinish));let delay=null;if(/^\d{4}-/.test(pf||'')&&/^\d{4}-/.test(ef||'')){const d=Math.round((new Date(ef)-new Date(pf))/86400000);if(d>0)delay=d;}
-      rows.push({city,workstream:mappedWs,activity,batch_label:currentGroup,batch_no:bn,act_type:deriveType(mappedWs,activity,helpers),planned_start:fmtD(cell(ws,r,C.plannedStart)),planned_finish:pf,exp_start:fmtD(cell(ws,r,C.expectedStart)),exp_finish:ef,actual_start:fmtD(cell(ws,r,C.actualStart)),actual_finish:fmtD(cell(ws,r,C.actualFinish)),progress:p,status:normalizeStatus(cell(ws,r,C.status),p),delay_days:delay,root_cause_delay:C.rootCause!==null?clean(cell(ws,r,C.rootCause)):'',remark:clean(cell(ws,r,C.remark))||'',source_row:r+1});
+      const plannedStart=fmtD(cell(ws,r,C.plannedStart));
+      const pf=fmtD(cell(ws,r,C.plannedFinish));
+      const baseExpectedStart=fmtD(cell(ws,r,C.expectedStart));
+      const baseExpectedFinish=fmtD(cell(ws,r,C.expectedFinish));
+      const latestStart=fmtD(cell(ws,r,C.actualStart));
+      const latestFinish=fmtD(cell(ws,r,C.actualFinish));
+      const isDateValue=v=>/^\d{4}-\d{2}-\d{2}$/.test(String(v||''));
+      const effectiveExpectedStart=isDateValue(latestStart)?latestStart:baseExpectedStart;
+      const effectiveExpectedFinish=isDateValue(latestFinish)?latestFinish:baseExpectedFinish;
+      let delay=null;
+      if(isDateValue(pf)&&isDateValue(effectiveExpectedFinish)){
+        const d=Math.round((new Date(effectiveExpectedFinish+'T00:00:00Z')-new Date(pf+'T00:00:00Z'))/86400000);
+        if(d>0)delay=d;
+      }
+      rows.push({city,workstream:mappedWs,activity,batch_label:currentGroup,batch_no:bn,act_type:deriveType(mappedWs,activity,helpers),planned_start:plannedStart,planned_finish:pf,exp_start:effectiveExpectedStart,exp_finish:effectiveExpectedFinish,actual_start:latestStart,actual_finish:latestFinish,progress:p,status:normalizeStatus(cell(ws,r,C.status),p),delay_days:delay,root_cause_delay:C.rootCause!==null?clean(cell(ws,r,C.rootCause)):'',remark:clean(cell(ws,r,C.remark))||'',source_row:r+1});
     }
     cities[city]=rows;
   }
