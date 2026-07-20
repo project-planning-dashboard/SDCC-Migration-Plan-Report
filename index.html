@@ -3169,8 +3169,8 @@ function upstreamE2ERow(r){
 }
 
 function upstreamSATRow(r){
-  const t = streamText(r);
-  return (t.includes('upstream sat') || (t.includes('adms sat') && !t.includes('downstream'))) && !t.includes('derms');
+  // SAT is a single shared milestone sourced only from ADMS SAT.
+  return workstreamKey(r && r.workstream) === 'ADMS SAT';
 }
 
 function upstreamLiveOnRow(r){
@@ -3189,8 +3189,8 @@ function downstreamE2ERow(r){
 }
 
 function downstreamSATRow(r){
-  const t = streamText(r);
-  return isDownstreamMilestoneRow(r) && (t.includes('downstream sat') || t.includes('dowstream sat'));
+  // Repeat the same ADMS SAT milestone in the downstream section.
+  return workstreamKey(r && r.workstream) === 'ADMS SAT';
 }
 
 function downstreamLiveOnRow(r){
@@ -3231,8 +3231,8 @@ function getCityMilestones(rows){
       return m ? exactMilestoneRow(label, m.planned_finish, m.exp_finish, m.progress) : '';
     };
     return {
-      upstream: [make('upstream','sld','SLD & Val.'), make('upstream','e2e','E2E'), make('upstream','sat','SAT'), make('upstream','live','Live On')].filter(Boolean),
-      downstream: [make('downstream','sld','SLD & Val.'), make('downstream','e2e','E2E'), make('downstream','sat','SAT'), make('downstream','live','Live On')].filter(Boolean)
+      upstream: [make('upstream','sld','SLD & Val.'), make('upstream','e2e','E2E'), make('upstream','sat','ADMS SAT'), make('upstream','live','Live On')].filter(Boolean),
+      downstream: [make('downstream','sld','SLD & Val.'), make('downstream','e2e','E2E'), make('downstream','sat','ADMS SAT'), make('downstream','live','Live On')].filter(Boolean)
     };
   }
 
@@ -3273,13 +3273,13 @@ function getCityMilestones(rows){
     upstream: [
       exactMilestoneRow('SLD & Val.', upSLDPlan, upSLDExp, averageMilestoneProgress(upstreamSourceRows, upstreamSLDRow)),
       exactMilestoneRow('E2E', upE2EPlan, upE2EExp, averageMilestoneProgress(upstreamSourceRows, upstreamE2ERow)),
-      exactMilestoneRow('SAT', upSATPlan, upSATExp, averageMilestoneProgress(rows, upstreamSATRow)),
+      exactMilestoneRow('ADMS SAT', upSATPlan, upSATExp, averageMilestoneProgress(rows, upstreamSATRow)),
       exactMilestoneRow('Live On', upLivePlan, upLiveExp, averageMilestoneProgress(rows, upstreamLiveOnRow))
     ].filter(Boolean),
     downstream: [
       exactMilestoneRow('SLD & Val.', dnSLDPlan, dnSLDExp, averageMilestoneProgress(rows, downstreamSLDRow)),
       exactMilestoneRow('E2E', dnE2EPlan, dnE2EExp, averageMilestoneProgress(rows, downstreamE2ERow)),
-      exactMilestoneRow('SAT', dnSATPlan, dnSATExp, averageMilestoneProgress(rows, downstreamSATRow)),
+      exactMilestoneRow('ADMS SAT', dnSATPlan, dnSATExp, averageMilestoneProgress(rows, downstreamSATRow)),
       exactMilestoneRow('Live On', dnLivePlan, dnLiveExp, averageMilestoneProgress(rows, downstreamLiveOnRow))
     ].filter(Boolean)
   };
@@ -3944,11 +3944,11 @@ function buildMilestones(){
   const order = [
     ['upstream','Upstream','sld','SLD & Val.'],
     ['upstream','Upstream','e2e','E2E'],
-    ['upstream','Upstream','sat','SAT'],
+    ['upstream','Upstream','sat','ADMS SAT'],
     ['upstream','Upstream','live','Live On'],
     ['downstream','Downstream','sld','SLD & Val.'],
     ['downstream','Downstream','e2e','E2E'],
-    ['downstream','Downstream','sat','SAT'],
+    ['downstream','Downstream','sat','ADMS SAT'],
     ['downstream','Downstream','live','Live On']
   ];
   let rows = [];
@@ -4657,11 +4657,11 @@ function summaryMilestoneRows(){
   const order = [
     ['upstream','Upstream','sld','SLD & Val.'],
     ['upstream','Upstream','e2e','E2E'],
-    ['upstream','Upstream','sat','SAT'],
+    ['upstream','Upstream','sat','ADMS SAT'],
     ['upstream','Upstream','live','Live On'],
     ['downstream','Downstream','sld','SLD & Val.'],
     ['downstream','Downstream','e2e','E2E'],
-    ['downstream','Downstream','sat','SAT'],
+    ['downstream','Downstream','sat','ADMS SAT'],
     ['downstream','Downstream','live','Live On']
   ];
   const out=[];
@@ -4872,15 +4872,17 @@ function deriveSummaryMilestones(rows, city){
   const upSLDProgress = allUpstream.filter(r => ['SLD Submission','SLD Validation'].includes(String(r.act_type||'')));
   const upE2EProgress = allUpstream.filter(r => ['E2E for Grid SS','E2E Rectification'].includes(String(r.act_type||'')));
 
-  const upSAT = pick(r => workstreamKey(r.workstream)==='Upstream SAT');
   const upLive = pick(r => workstreamKey(r.workstream)==='Live On - Upstream');
+
+  // SAT is one shared milestone per city and is sourced ONLY from ADMS SAT.
+  // The exact same dates, progress and variance are repeated in both sections.
+  const commonSAT = pick(r => workstreamKey(r.workstream)==='ADMS SAT');
 
   // Downstream SLD progress must use only the two activities shown in the matrix:
   // SLD & DB + Validation. Demo rows are explicitly excluded.
   const dnSLD = pick(r => workstreamKey(r.workstream)==='Downstream' && !!r.batch_no &&
     ['Downstream SLD','Downstream Validation'].includes(String(r.act_type||'')));
   const dnE2E = pick(r => workstreamKey(r.workstream)==='Downstream' && String(r.act_type||'')==='Downstream E2E');
-  const dnSAT = pick(r => ['ADMS SAT','Downstream SAT'].includes(workstreamKey(r.workstream)));
   const dnLive = pick(r => workstreamKey(r.workstream)==='Live On - Downstream');
 
   const milestone = (dateList, progressList) => {
@@ -4898,13 +4900,13 @@ function deriveSummaryMilestones(rows, city){
     upstream:{
       sld:milestone(upSLDDate,upSLDProgress),
       e2e:milestone(upE2EDate,upE2EProgress),
-      sat:milestone(upSAT,upSAT),
+      sat:milestone(commonSAT,commonSAT),
       live:milestone(upLive,upLive)
     },
     downstream:{
       sld:milestone(dnSLD,dnSLD),
       e2e:milestone(dnE2E,dnE2E),
-      sat:milestone(dnSAT,dnSAT),
+      sat:milestone(commonSAT,commonSAT),
       live:milestone(dnLive,dnLive)
     }
   };
@@ -4988,8 +4990,7 @@ function sanitizeDashboardData(data){
 }
 
 function downstreamSATRow(r){
-  const ws = workstreamKey(r && r.workstream);
-  return ws === 'ADMS SAT' || ws === 'Downstream SAT';
+  return workstreamKey(r && r.workstream) === 'ADMS SAT';
 }
 
 function buildDownstreamMatrixInto(containerId){
