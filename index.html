@@ -2825,9 +2825,9 @@ function getActStatusIcon(status){
 function buildKPIs(){
   const data = currentData;
   // Overall KPIs are calculated from the Detailed Plan rows loaded from the latest Excel only.
-  // Planned % = count of activities with Planned Finish <= Today / Total activities.
+  // Planned % = average time-phased planned progress across all activities.
   // Actual %  = average of activity Progress % from the same Detailed Plan rows.
-  let total=0,done=0,inprog=0,notstart=0,delayed=0,plannedDue=0,actualSum=0;
+  let total=0,done=0,inprog=0,notstart=0,delayed=0,plannedSum=0,actualSum=0;
   const today = new Date();
   today.setHours(23,59,59,999);
   const cities = data.cities || {};
@@ -2842,10 +2842,10 @@ function buildKPIs(){
     notstart += rows.filter(r=>statusOf(r)==='Not Started').length;
     delayed += cityDelayed;
     if(Object.prototype.hasOwnProperty.call(delayedByCity, city)) delayedByCity[city] = cityDelayed;
-    plannedDue += rows.reduce((s,r)=>s + (isPlannedDue(r, today) ? 1 : 0), 0);
+    plannedSum += rows.reduce((s,r)=>s + plannedProgressPercent(r, today), 0);
     actualSum += rows.reduce((s,r)=>s + actualProgressPercent(r), 0);
   }
-  const plannedPct = total>0 ? Math.round((plannedDue/total)*100) : 0;
+  const plannedPct = total>0 ? Math.round(plannedSum/total) : 0;
   const actualPct = total>0 ? Math.round(actualSum/total) : 0;
   const variancePct = actualPct - plannedPct;
   const varianceDisplay = `${variancePct>0?'+':''}${variancePct}%`;
@@ -2853,7 +2853,7 @@ function buildKPIs(){
   const varianceIcon = variancePct>0 ? '↗' : (variancePct<0 ? '↘' : '↔');
 
   const kpis = [
-    {accent:'var(--ab)', icon:'📅', val:plannedPct+'%', lbl:'Planned %', sub:`${plannedDue} activities due / ${total} total`, bar:plannedPct},
+    {accent:'var(--ab)', icon:'📅', val:plannedPct+'%', lbl:'Planned %', sub:'Time-phased to current cut-off', bar:plannedPct},
     {accent:'var(--success)', icon:'✅', val:actualPct+'%', lbl:'Actual %', sub:'Average % Progress from Excel', bar:actualPct},
     {accent:varianceAccent, icon:varianceIcon, val:varianceDisplay, lbl:'Variance', sub:'Actual % − Planned %', bar:Math.min(100,Math.abs(variancePct))},
     {accent:'var(--ab)', icon:'📋', val:total, lbl:'Total Activities', sub:'From Detailed Plan', bar:100},
@@ -3019,16 +3019,35 @@ function actualProgressPercent(r){
 }
 
 function isPlannedDue(r, asOfDate){
-  const today = asOfDate || new Date();
+  const cutoff = asOfDate || new Date();
   const pf = parseDateValue(r && r.planned_finish);
   if(!pf) return false;
-  return pf.getTime() <= today.getTime();
+  const cutoffDay = Date.UTC(cutoff.getFullYear(), cutoff.getMonth(), cutoff.getDate());
+  const finishDay = Date.UTC(pf.getUTCFullYear(), pf.getUTCMonth(), pf.getUTCDate());
+  return finishDay <= cutoffDay;
 }
 
 function plannedProgressPercent(r, asOfDate){
-  // Planned progress uses the agreed Detailed Plan rule:
-  // 100% when Planned Finish is due/passed as of today, otherwise 0%.
-  return isPlannedDue(r, asOfDate) ? 100 : 0;
+  // Time-phased planned progress, distributed linearly across the inclusive
+  // Planned Start–Planned Finish duration.
+  // Example: 01-Jul to 10-Jul at a 06-Jul cut-off = 6 / 10 = 60%.
+  const ps = parseDateValue(r && r.planned_start);
+  const pf = parseDateValue(r && r.planned_finish);
+  if(!ps || !pf) return 0;
+
+  const cutoff = asOfDate || new Date();
+  const dayMs = 86400000;
+  const startDay = Date.UTC(ps.getUTCFullYear(), ps.getUTCMonth(), ps.getUTCDate());
+  const finishDay = Date.UTC(pf.getUTCFullYear(), pf.getUTCMonth(), pf.getUTCDate());
+  const cutoffDay = Date.UTC(cutoff.getFullYear(), cutoff.getMonth(), cutoff.getDate());
+
+  if(cutoffDay < startDay) return 0;
+  if(cutoffDay >= finishDay) return 100;
+  if(finishDay < startDay) return 0;
+
+  const totalDays = Math.floor((finishDay - startDay) / dayMs) + 1;
+  const elapsedDays = Math.floor((cutoffDay - startDay) / dayMs) + 1;
+  return clampPct((elapsedDays / totalDays) * 100);
 }
 
 function isIntegrationRow(r){
@@ -3466,9 +3485,9 @@ function citySummaryStrip(rows){
   const notstart = list.filter(r=>statusOf(r)==='Not Started').length;
   const today = new Date();
   today.setHours(23,59,59,999);
-  const plannedDue = list.reduce((s,r)=>s + (isPlannedDue(r, today) ? 1 : 0), 0);
+  const plannedSum = list.reduce((s,r)=>s + plannedProgressPercent(r, today), 0);
   const actualSum = list.reduce((s,r)=>s + actualProgressPercent(r), 0);
-  const plannedPct = total>0 ? Math.round((plannedDue/total)*100) : 0;
+  const plannedPct = total>0 ? Math.round(plannedSum/total) : 0;
   const actualPct = total>0 ? Math.round(actualSum/total) : 0;
   const variancePct = actualPct - plannedPct;
   const varianceTxt = `${variancePct>0?'+':''}${variancePct}%`;
