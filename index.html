@@ -2443,6 +2443,78 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
 .milestone-compact .ms-progress span{display:inline-block!important;min-width:30px!important;padding:1px 4px!important;border-radius:5px!important;background:var(--surface)!important;border:1px solid var(--border)!important;}
 .del-table{min-width:1250px!important;}
 
+
+/* ── PROFESSIONAL DELAYED KPI CITY BAR CHART ── */
+.exec-summary-card-delayed{
+  padding-bottom:14px!important;
+}
+.exec-summary-card-delayed .exec-summary-icon{
+  margin-bottom:7px!important;
+}
+.exec-summary-card-delayed .exec-summary-lbl{
+  margin-bottom:6px!important;
+}
+.delayed-kpi-breakdown{
+  display:flex!important;
+  flex-direction:column!important;
+  gap:5px!important;
+  margin:7px 0 9px!important;
+}
+.delayed-bar-row{
+  display:grid!important;
+  grid-template-columns:48px minmax(0,1fr) 20px!important;
+  align-items:center!important;
+  gap:5px!important;
+  min-width:0!important;
+}
+.delayed-city-name{
+  min-width:0!important;
+  overflow:hidden!important;
+  text-overflow:ellipsis!important;
+  white-space:nowrap!important;
+  font-size:8px!important;
+  line-height:1!important;
+  font-weight:900!important;
+  color:var(--text-secondary)!important;
+  text-transform:uppercase!important;
+  letter-spacing:.05px!important;
+}
+.delayed-bar-track{
+  position:relative!important;
+  width:100%!important;
+  height:8px!important;
+  overflow:hidden!important;
+  border-radius:999px!important;
+  background:color-mix(in srgb,var(--crit) 8%,var(--surface2))!important;
+  border:1px solid color-mix(in srgb,var(--crit) 12%,var(--border))!important;
+}
+.delayed-bar-fill{
+  display:block!important;
+  height:100%!important;
+  min-width:0!important;
+  border-radius:999px!important;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--crit) 72%,#fff),var(--crit))!important;
+  transition:width .25s ease!important;
+}
+.delayed-city-count{
+  justify-self:end!important;
+  min-width:18px!important;
+  height:18px!important;
+  border-radius:6px!important;
+  display:inline-flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  padding:0 4px!important;
+  background:color-mix(in srgb,var(--crit) 12%,#fff)!important;
+  color:var(--crit)!important;
+  font-size:9.5px!important;
+  line-height:1!important;
+  font-weight:950!important;
+}
+.exec-summary-card-delayed .exec-summary-mini{
+  margin-top:3px!important;
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -2679,13 +2751,17 @@ function buildKPIs(){
   const today = new Date();
   today.setHours(23,59,59,999);
   const cities = data.cities || {};
+  const cityOrder = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+  const delayedByCity = Object.fromEntries(cityOrder.map(city => [city, 0]));
   for(const city in cities){
     const rows = validStatusRows(cities[city] || []);
+    const cityDelayed = rows.filter(r=>statusOf(r)==='Delayed').length;
     total += rows.length;
     done += rows.filter(r=>statusOf(r)==='Completed').length;
     inprog += rows.filter(r=>statusOf(r)==='In Progress').length;
     notstart += rows.filter(r=>statusOf(r)==='Not Started').length;
-    delayed += rows.filter(r=>statusOf(r)==='Delayed').length;
+    delayed += cityDelayed;
+    if(Object.prototype.hasOwnProperty.call(delayedByCity, city)) delayedByCity[city] = cityDelayed;
     plannedDue += rows.reduce((s,r)=>s + (isPlannedDue(r, today) ? 1 : 0), 0);
     actualSum += rows.reduce((s,r)=>s + actualProgressPercent(r), 0);
   }
@@ -2704,21 +2780,46 @@ function buildKPIs(){
     {accent:'var(--success)', icon:'✓', val:done, lbl:'Completed', sub:'', bar:actualPct},
     {accent:'var(--warn)', icon:'↻', val:inprog, lbl:'In Progress', sub:'', bar:total?Math.round(inprog/total*100):0},
     {accent:'var(--text-muted)', icon:'⏳', val:notstart, lbl:'Not Started', sub:'', bar:total?Math.round(notstart/total*100):0},
-    {accent:'var(--crit)', icon:'!', val:delayed, lbl:'Delayed', sub:'', bar:total?Math.round(delayed/total*100):0}
+    {accent:'var(--crit)', icon:'!', val:delayed, lbl:'Total Delayed', sub:'', bar:total?Math.round(delayed/total*100):0, kind:'delayed', cityCounts:delayedByCity}
   ];
 
   const grid = document.getElementById('kpiGrid');
   if(grid){
     grid.className = 'exec-summary-grid';
-    grid.innerHTML = kpis.map(k=>`
-      <div class="exec-summary-card" style="--accent:${k.accent};">
+    grid.innerHTML = kpis.map(k=>{
+      const delayedBreakdown = k.kind === 'delayed' ? (()=>{
+        const cityRows = [
+          ['MADINAH','Madinah'],
+          ['JEDDAH','Jeddah'],
+          ['MAKKAH','Makkah'],
+          ['ABHA','Abha'],
+          ['JIZAN','Jizan']
+        ].map(([key,label],order)=>({
+          key,
+          label,
+          order,
+          count:(k.cityCounts&&k.cityCounts[key])||0
+        })).sort((a,b)=>(b.count-a.count)||(a.order-b.order));
+        const maxCount = Math.max(1,...cityRows.map(x=>x.count));
+        return `
+        <div class="delayed-kpi-breakdown" aria-label="Delayed activities by city, sorted highest to lowest">
+          ${cityRows.map(item=>`
+            <div class="delayed-bar-row" title="${item.label}: ${item.count} delayed">
+              <span class="delayed-city-name">${item.label}</span>
+              <span class="delayed-bar-track"><span class="delayed-bar-fill" style="width:${item.count?Math.max(8,Math.round(item.count/maxCount*100)):0}%;"></span></span>
+              <b class="delayed-city-count">${item.count}</b>
+            </div>`).join('')}
+        </div>`;
+      })() : `<div class="exec-summary-sub">${k.sub}</div>`;
+      return `
+      <div class="exec-summary-card ${k.kind==='delayed'?'exec-summary-card-delayed':''}" style="--accent:${k.accent};">
         <div class="exec-summary-icon">${k.icon}</div>
         <div class="exec-summary-val">${k.val}</div>
         <div class="exec-summary-lbl">${k.lbl}</div>
-        <div class="exec-summary-sub">${k.sub}</div>
+        ${delayedBreakdown}
         <div class="exec-summary-mini"><span style="--w:${Math.max(0,Math.min(100,k.bar||0))}%;"></span></div>
-      </div>
-    `).join('');
+      </div>`;
+    }).join('');
   }
 
   const delayedTabCount = document.getElementById('delayedTabCount');
