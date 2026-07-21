@@ -2595,6 +2595,150 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
   .exec-summary-card{min-height:225px!important;height:auto!important;}
 }
 
+
+
+/* ═══════════════════════════════════════════════════════════
+   CRITICAL PATH TAB — graphical planning sequence
+   ═══════════════════════════════════════════════════════════ */
+.cp-shell{
+  background:linear-gradient(180deg,#f8fbff 0%,#f3f7fb 100%);
+  border:1px solid #dce7f1;
+  border-radius:16px;
+  padding:18px;
+  box-shadow:0 10px 28px rgba(17,48,82,.07);
+}
+.cp-topbar{
+  display:flex;align-items:flex-start;justify-content:space-between;gap:16px;
+  margin-bottom:14px;flex-wrap:wrap;
+}
+.cp-title-wrap{display:flex;align-items:flex-start;gap:12px;min-width:260px;}
+.cp-title-icon{
+  width:42px;height:42px;border-radius:12px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#b91c1c,#ef4444);color:#fff;
+  box-shadow:0 8px 18px rgba(185,28,28,.22);flex:0 0 auto;
+}
+.cp-title-wrap h2{margin:0;color:#16324f;font-size:17px;letter-spacing:.02em;}
+.cp-title-wrap p{margin:4px 0 0;color:#6b7f93;font-size:11.5px;line-height:1.45;}
+.cp-method-badge{
+  padding:8px 11px;border-radius:999px;background:#fff7ed;border:1px solid #fed7aa;
+  color:#9a3412;font-size:10.5px;font-weight:800;white-space:nowrap;
+}
+.cp-city-filters{display:flex;gap:7px;flex-wrap:wrap;margin:0 0 14px;}
+.cp-filter-btn{
+  appearance:none;border:1px solid #d5e1ec;background:#fff;color:#4b647b;
+  border-radius:999px;padding:7px 12px;font-size:10.5px;font-weight:800;
+  cursor:pointer;transition:.18s ease;
+}
+.cp-filter-btn:hover{transform:translateY(-1px);border-color:#8eb6d8;color:#005a9c;}
+.cp-filter-btn.active{background:#005fae;color:#fff;border-color:#005fae;box-shadow:0 5px 12px rgba(0,95,174,.18);}
+.cp-summary-grid{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:16px;
+}
+.cp-summary-card{
+  background:#fff;border:1px solid #dfe8f1;border-radius:12px;padding:11px 13px;
+  min-height:72px;position:relative;overflow:hidden;
+}
+.cp-summary-card:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--cp-accent,#0060b5);}
+.cp-summary-label{font-size:9.5px;text-transform:uppercase;letter-spacing:.08em;color:#72859a;font-weight:800;}
+.cp-summary-value{font-size:22px;color:#17324d;font-weight:900;margin-top:4px;line-height:1;}
+.cp-summary-sub{font-size:9.5px;color:#8091a3;margin-top:5px;}
+.cp-city-section{
+  background:#fff;border:1px solid #dce6ef;border-radius:14px;margin:0 0 14px;overflow:hidden;
+}
+.cp-city-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;
+  background:linear-gradient(90deg,rgba(0,96,181,.07),rgba(255,255,255,.95));
+  border-bottom:1px solid #e5edf4;
+}
+.cp-city-identity{display:flex;align-items:center;gap:9px;min-width:0;}
+.cp-city-dot{width:10px;height:10px;border-radius:50%;background:var(--city-color,#0060b5);box-shadow:0 0 0 4px color-mix(in srgb,var(--city-color,#0060b5) 16%,transparent);}
+.cp-city-name{font-size:13px;font-weight:900;color:#193650;letter-spacing:.04em;}
+.cp-city-meta{font-size:9.5px;color:#73869a;margin-top:2px;}
+.cp-city-kpis{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end;}
+.cp-city-pill{padding:5px 8px;border-radius:999px;background:#f5f8fb;border:1px solid #e1e9f0;font-size:9.5px;font-weight:800;color:#4c6176;}
+.cp-path-scroll{overflow-x:auto;padding:16px 14px 18px;scrollbar-color:#9bb7cf #edf3f8;}
+.cp-path{display:flex;align-items:stretch;min-width:max-content;}
+.cp-single-diagram{display:flex;align-items:flex-start;gap:0;min-width:max-content;padding-bottom:4px;}
+.cp-city-lanes{display:flex;flex-direction:column;gap:18px;min-width:max-content;padding:4px 2px 8px;}
+.cp-lane{display:grid;grid-template-columns:118px auto;align-items:center;gap:12px;}
+.cp-lane-title{align-self:stretch;min-height:210px;border-radius:13px;padding:14px 10px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#17324d;background:linear-gradient(180deg,#ffffff 0%,#f8fbfd 100%);border:1px solid #dce6ef;box-shadow:0 7px 18px rgba(20,58,94,.06);position:relative;overflow:hidden;}
+.cp-lane-title:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:#9fb5c9;}
+.cp-lane-title.upstream:before{background:#0060b5;}
+.cp-lane-title.downstream:before{background:#7c90a6;}
+.cp-lane-title strong{font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#17324d;}
+.cp-lane-title span{font-size:9px;opacity:.95;margin-top:5px;line-height:1.35;color:#5f7388;}
+.cp-lane-flow{display:flex;align-items:stretch;min-width:max-content;}
+.cp-lane-flow .cp-node{width:205px;min-height:210px;}
+.cp-lane-empty{width:205px;min-height:210px;border:1px dashed #cbd9e5;border-radius:13px;display:grid;place-items:center;color:#7a8da0;background:#f8fbfd;font-size:10px;font-weight:800;}
+.cp-lane-divider{height:1px;background:linear-gradient(90deg,transparent,#d8e4ee 12%,#d8e4ee 88%,transparent);margin:0 8px;}
+@media(max-width:700px){.cp-lane{grid-template-columns:90px auto}.cp-lane-title{min-height:195px}.cp-lane-flow .cp-node{width:190px;min-height:195px}}
+
+.cp-parallel-wrap{display:flex;align-items:center;gap:14px;position:relative;padding:0 8px;flex:0 0 auto;}
+.cp-parallel-wrap:before,.cp-parallel-wrap:after{content:"";position:absolute;top:50%;width:16px;height:2px;background:#9fb5c9;transform:translateY(-50%);}
+.cp-parallel-wrap:before{left:-8px;}
+.cp-parallel-wrap:after{right:-8px;}
+.cp-parallel-stack{position:relative;display:flex;flex-direction:column;gap:16px;padding:10px 18px;}
+.cp-parallel-stack:before,.cp-parallel-stack:after{content:"";position:absolute;top:22px;bottom:22px;width:2px;background:#d5e0ea;}
+.cp-parallel-stack:before{left:6px;}
+.cp-parallel-stack:after{right:6px;}
+.cp-parallel-stack .cp-node{position:relative;z-index:1;}
+.cp-parallel-label,.cp-live-label{position:absolute;top:-2px;left:50%;transform:translate(-50%,-100%);font-size:8.5px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#7b8fa4;background:#f8fbff;padding:2px 8px;border:1px solid #dbe7f1;border-radius:999px;white-space:nowrap;}
+.cp-live-wrap{display:flex;align-items:center;gap:14px;position:relative;padding:0 8px;flex:0 0 auto;}
+.cp-live-wrap:before{content:"";position:absolute;left:-8px;top:50%;width:16px;height:2px;background:#9fb5c9;transform:translateY(-50%);}
+.cp-live-stack{position:relative;display:flex;flex-direction:column;gap:16px;padding:10px 0 10px 18px;}
+.cp-live-stack:before{content:"";position:absolute;left:6px;top:22px;bottom:22px;width:2px;background:#d5e0ea;}
+.cp-live-stack .cp-node{position:relative;z-index:1;}
+.cp-node{
+  width:218px;min-height:210px;background:#fff;border:1px solid #dce6ef;border-radius:13px;
+  padding:12px;position:relative;box-shadow:0 7px 18px rgba(20,58,94,.07);
+  display:flex;flex-direction:column;transition:.18s ease;
+}
+.cp-node:hover{transform:translateY(-2px);box-shadow:0 11px 24px rgba(20,58,94,.12);}
+.cp-node.delayed{border-color:#fecaca;background:linear-gradient(180deg,#fff 0%,#fff8f8 100%);}
+.cp-node.inprogress{border-color:#bfdbfe;}
+.cp-node.completed{border-color:#bbf7d0;}
+.cp-node-step{
+  position:absolute;top:-9px;left:12px;height:19px;min-width:19px;padding:0 5px;border-radius:999px;
+  display:grid;place-items:center;background:#183b5c;color:#fff;font-size:9px;font-weight:900;
+  border:2px solid #fff;
+}
+.cp-node-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;margin-top:4px;}
+.cp-node-stage{font-size:8.5px;text-transform:uppercase;letter-spacing:.08em;color:#6f8296;font-weight:900;}
+.cp-progress-ring{
+  --p:0;--ring:#0060b5;width:48px;height:48px;border-radius:50%;flex:0 0 auto;
+  background:conic-gradient(var(--ring) calc(var(--p)*1%),#e8eef4 0);
+  display:grid;place-items:center;position:relative;
+}
+.cp-progress-ring:before{content:"";position:absolute;width:36px;height:36px;border-radius:50%;background:#fff;}
+.cp-progress-ring b{position:relative;font-size:10px;color:#183650;z-index:1;}
+.cp-node-name{font-size:12px;font-weight:900;color:#17334e;line-height:1.35;margin-top:5px;min-height:33px;}
+.cp-node-batch{font-size:9px;color:#697f94;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cp-date-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px;}
+.cp-date-box{background:#f6f9fc;border:1px solid #e7edf3;border-radius:8px;padding:7px;min-width:0;}
+.cp-date-label{font-size:7.5px;text-transform:uppercase;letter-spacing:.06em;color:#8292a3;font-weight:900;}
+.cp-date-value{font-size:9.5px;color:#29465f;font-weight:800;margin-top:3px;white-space:nowrap;}
+.cp-exp-late{color:#b91c1c;}
+.cp-node-bottom{margin-top:auto;padding-top:10px;}
+.cp-progress-row{display:flex;align-items:center;justify-content:space-between;font-size:8.5px;font-weight:800;color:#657b90;margin-bottom:5px;}
+.cp-plan-track{height:7px;border-radius:999px;background:#e8eef4;overflow:hidden;position:relative;}
+.cp-plan-fill{height:100%;border-radius:999px;background:#9fb4c7;}
+.cp-actual-fill{height:3px;border-radius:999px;background:#0060b5;position:absolute;left:0;bottom:0;}
+.cp-delay-badge{display:inline-flex;align-items:center;gap:4px;margin-top:8px;padding:4px 7px;border-radius:999px;font-size:8.5px;font-weight:900;background:#f1f5f9;color:#60758a;}
+.cp-delay-badge.late{background:#fee2e2;color:#b91c1c;}
+.cp-connector{width:46px;display:flex;align-items:center;justify-content:center;position:relative;flex:0 0 46px;}
+.cp-connector:before{content:"";height:2px;background:#9fb5c9;position:absolute;left:3px;right:8px;top:50%;}
+.cp-connector:after{content:"";width:8px;height:8px;border-top:2px solid #9fb5c9;border-right:2px solid #9fb5c9;transform:rotate(45deg);position:absolute;right:6px;top:calc(50% - 4px);}
+.cp-empty{padding:28px;text-align:center;color:#71859a;font-size:12px;background:#fff;border:1px dashed #cbd9e5;border-radius:12px;}
+.cp-note{font-size:9.5px;color:#778b9e;margin-top:4px;line-height:1.5;}
+@media(max-width:900px){
+  .cp-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .cp-shell{padding:12px;}
+}
+@media(max-width:520px){
+  .cp-summary-grid{grid-template-columns:1fr;}
+  .cp-node{width:205px;}
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -2634,6 +2778,10 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
   <button class="tab-btn active" onclick="switchTab('overview',this)" role="tab">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
     Overview
+  </button>
+  <button class="tab-btn" onclick="switchTab('critical',this)" role="tab">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18h4l3-6 4 3 3-7 4 2"/><circle cx="3" cy="18" r="1.5"/><circle cx="10" cy="12" r="1.5"/><circle cx="14" cy="15" r="1.5"/><circle cx="17" cy="8" r="1.5"/><circle cx="21" cy="10" r="1.5"/></svg>
+    Critical Path
   </button>
   <button class="tab-btn" onclick="switchTab('detailed',this)" role="tab">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
@@ -2675,6 +2823,28 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
         <tbody id="milestoneBody"></tbody>
       </table>
     </div>
+  </div>
+</div>
+
+<!-- ═══ TAB: CRITICAL PATH ═══ -->
+<div class="tab-panel" id="tab-critical">
+  <div class="cp-shell">
+    <div class="cp-topbar">
+      <div class="cp-title-wrap">
+        <div class="cp-title-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 18h4l3-6 4 3 3-7 4 2"/><circle cx="3" cy="18" r="1.5"/><circle cx="10" cy="12" r="1.5"/><circle cx="14" cy="15" r="1.5"/><circle cx="17" cy="8" r="1.5"/><circle cx="21" cy="10" r="1.5"/></svg>
+        </div>
+        <div>
+          <h2>CRITICAL PATH &amp; PROGRESS FLOW</h2>
+          <p>Dynamic planning sequence from the latest Excel dates, final batches and project completion gates.</p>
+        </div>
+      </div>
+      <div class="cp-method-badge">Planning Critical Sequence · CPM relationships not available</div>
+    </div>
+    <div class="cp-city-filters" id="cpCityFilters"></div>
+    <div class="cp-summary-grid" id="cpSummary"></div>
+    <div id="criticalPathContainer"></div>
+    <div class="cp-note">Note: The graphic is inferred from activity dates and logical workstream order. A formal Primavera-style CPM path requires predecessor, successor and total-float fields in the source workbook.</div>
   </div>
 </div>
 
@@ -3251,7 +3421,7 @@ function getCityMilestones(rows){
     };
     return {
       upstream: [make('upstream','sld','SLD & Val.'), make('upstream','e2e','E2E'), make('upstream','sat','ADMS SAT'), make('upstream','live','Live On')].filter(Boolean),
-      downstream: [make('downstream','sld','SLD & Val.'), make('downstream','e2e','E2E'), make('downstream','sat','ADMS SAT'), make('downstream','live','Live On')].filter(Boolean)
+      downstream: [make('downstream','sld','SLD & Val.'), make('downstream','e2e','E2E for SFD'), make('downstream','sat','ADMS SAT'), make('downstream','live','Live On')].filter(Boolean)
     };
   }
 
@@ -3477,7 +3647,7 @@ function fixedMilestoneRowsForCity(city, stream){
   return [];
 }
 
-function citySummaryStrip(rows){
+function citySummaryStats(rows){
   const list = validStatusRows(rows);
   const total = list.length;
   const done = list.filter(r=>statusOf(r)==='Completed').length;
@@ -3492,17 +3662,21 @@ function citySummaryStrip(rows){
   const variancePct = actualPct - plannedPct;
   const varianceTxt = `${variancePct>0?'+':''}${variancePct}%`;
   const varianceClass = variancePct>0 ? 'good' : (variancePct<0 ? 'bad' : 'neutral');
+  return {total,done,inprog,notstart,plannedPct,actualPct,variancePct,varianceTxt,varianceClass};
+}
 
+function citySummaryStrip(rows){
+  const stats = citySummaryStats(rows);
   const performanceCards = [
-    {cls:'blue', val:`${plannedPct}%`, lbl:'Planned %'},
-    {cls:'green', val:`${actualPct}%`, lbl:'Actual %'},
-    {cls:varianceClass, val:varianceTxt, lbl:'Variance'}
+    {cls:'blue', val:`${stats.plannedPct}%`, lbl:'Planned %'},
+    {cls:'green', val:`${stats.actualPct}%`, lbl:'Actual %'},
+    {cls:stats.varianceClass, val:stats.varianceTxt, lbl:'Variance'}
   ];
   const countCards = [
-    {cls:'blue', val:total, lbl:'Total'},
-    {cls:'green', val:done, lbl:'Completed'},
-    {cls:'amber', val:inprog, lbl:'In Progress'},
-    {cls:'slate', val:notstart, lbl:'Not Started'}
+    {cls:'blue', val:stats.total, lbl:'Total'},
+    {cls:'green', val:stats.done, lbl:'Completed'},
+    {cls:'amber', val:stats.inprog, lbl:'In Progress'},
+    {cls:'slate', val:stats.notstart, lbl:'Not Started'}
   ];
   const renderCards = cards => cards.map(c=>`<div class="city-mini-card ${c.cls}"><div class="city-mini-val">${c.val}</div><div class="city-mini-lbl">${c.lbl}</div></div>`).join('');
 
@@ -4149,6 +4323,239 @@ function setDetailFilter(val, btn){
 }
 
 function filterDetailTable(){ renderDetailTable(); }
+
+
+// ──────────────────────────────────────────────────────────
+// CRITICAL PATH — graphical planning sequence
+// ──────────────────────────────────────────────────────────
+const CP_CITY_ORDER = ['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+let criticalPathCity = 'ALL';
+
+function cpDateMin(rows, field){
+  let best=null;
+  (rows||[]).forEach(r=>{
+    const d=parseDateValue(r&&r[field]);
+    if(d && !isNaN(d.getTime()) && (!best || d<best)) best=d;
+  });
+  return best;
+}
+function cpDateMax(rows, field){
+  let best=null;
+  (rows||[]).forEach(r=>{
+    const d=parseDateValue(r&&r[field]);
+    if(d && !isNaN(d.getTime()) && (!best || d>best)) best=d;
+  });
+  return best;
+}
+function cpIso(d){ return d && !isNaN(d.getTime()) ? d.toISOString().slice(0,10) : null; }
+function cpBatchNumber(v){ const m=String(v||'').match(/(\d+)/); return m?Number(m[1]):-1; }
+function cpLatestBatch(rows){
+  return (rows||[]).map(r=>r.batch_no).filter(Boolean).sort((a,b)=>cpBatchNumber(b)-cpBatchNumber(a))[0]||'';
+}
+function cpLatestRow(rows){
+  return (rows||[]).slice().sort((a,b)=>{
+    const da=parseDateValue(a.exp_finish)||parseDateValue(a.planned_finish)||new Date(0);
+    const db=parseDateValue(b.exp_finish)||parseDateValue(b.planned_finish)||new Date(0);
+    return db-da;
+  })[0]||null;
+}
+function cpAggregateNode(stage, label, rows, icon){
+  const list=(rows||[]).filter(Boolean);
+  if(!list.length) return null;
+  const ps=cpDateMin(list,'planned_start'), pf=cpDateMax(list,'planned_finish');
+  const es=cpDateMin(list,'exp_start')||ps, ef=cpDateMax(list,'exp_finish')||pf;
+  const actual=Math.round(list.reduce((s,r)=>s+rowProgress01(r)*100,0)/list.length);
+  const plan=Math.round(list.reduce((s,r)=>s+plannedProgressPercent(r),0)/list.length);
+  const delay=pf&&ef?diffDays(pf,ef):0;
+  let status='Not Started';
+  if(actual>=100) status='Completed';
+  else if(delay>0 || list.some(r=>statusOf(r)==='Delayed')) status='Delayed';
+  else if(actual>0) status='In Progress';
+  const batches=[...new Set(list.map(r=>r.batch_no).filter(Boolean))];
+  return {
+    stage,label,icon:icon||'◆',rows:list,
+    planned_start:cpIso(ps),planned_finish:cpIso(pf),
+    exp_start:cpIso(es),exp_finish:cpIso(ef),
+    actual,plan,delay,status,
+    batch:batches.length===1?batches[0]:(batches.length>1?`${batches.length} batches`:(list[0].batch_label||''))
+  };
+}
+function cpMilestoneSummaryNode(city, stream, key, stage, label, rows, icon, batchLabel){
+  const base = cpAggregateNode(stage, label, rows, icon);
+  const sm = currentData && currentData.summary_milestones && currentData.summary_milestones[city] && currentData.summary_milestones[city][stream] && currentData.summary_milestones[city][stream][key];
+  if(!base && !sm) return null;
+  const node = base || {stage,label,icon:icon||'◆',rows:[],planned_start:null,planned_finish:null,exp_start:null,exp_finish:null,actual:0,plan:0,delay:0,status:'Not Started',batch:batchLabel||''};
+  if(sm){
+    node.planned_finish = sm.planned_finish || node.planned_finish;
+    node.exp_finish = sm.exp_finish || node.exp_finish;
+    node.actual = milestoneProgressPercent(sm.progress);
+  }
+  if(batchLabel) node.batch = batchLabel;
+  const pf = parseDateValue(node.planned_finish);
+  const ef = parseDateValue(node.exp_finish);
+  node.delay = pf && ef ? diffDays(pf, ef) : 0;
+  if(node.actual>=100) node.status='Completed';
+  else if(node.delay>0 || (node.rows||[]).some(r=>statusOf(r)==='Delayed')) node.status='Delayed';
+  else if(node.actual>0) node.status='In Progress';
+  else node.status='Not Started';
+  return node;
+}
+function cpNodesForCity(city){
+  const rows=visibleRows(((currentData&&currentData.cities)||{})[city]||[]);
+  if(!rows.length) return null;
+  const up=rows.filter(r=>workstreamKey(r.workstream)==='Upstream');
+  const targetByCity={MADINAH:'Batch 10',JEDDAH:'Batch 10',MAKKAH:'Batch 10',ABHA:'Batch 08',JIZAN:'Batch 08'};
+  const target=targetByCity[city]||cpLatestBatch(up);
+  const finalUp=up.filter(r=>r.batch_no===target);
+  const dateUp=finalUp.length?finalUp:up.filter(r=>r.batch_no===cpLatestBatch(up));
+
+  const dn=rows.filter(r=>workstreamKey(r.workstream)==='Downstream');
+  const dnBatch=cpLatestBatch(dn);
+  const finalDn=dn.filter(r=>r.batch_no===dnBatch);
+
+  const telecom=up.filter(r=>/telecom\s*(readiness|rediness)/i.test(String(r.activity||'')));
+  const upDesign=dateUp.filter(r=>['SLD Submission','SLD Validation'].includes(String(r.act_type||'')));
+  const upE2E=up.filter(r=>['E2E for Grid SS','E2E Rectification'].includes(String(r.act_type||'')));
+  const dnDesign=dn.filter(r=>['Downstream SLD','Downstream Validation'].includes(String(r.act_type||'')));
+  // Downstream E2E comes from the city-level DS(E2E) row (e.g. “E2E for SFD …”).
+  const dnE2E=dn.filter(r=>downstreamE2ERow(r));
+  const adms=rows.filter(r=>workstreamKey(r.workstream)==='ADMS SAT');
+  const upLive=rows.filter(r=>workstreamKey(r.workstream)==='Live On - Upstream');
+  const dnLive=rows.filter(r=>workstreamKey(r.workstream)==='Live On - Downstream');
+
+  const structure={
+    telecom:cpAggregateNode('Prerequisite','Telecom Readiness',telecom,'📡'),
+    upDesign:cpMilestoneSummaryNode(city,'upstream','sld','Final Upstream Batch','SLD Submission & Validation',upDesign,'📐',target||'Final batch'),
+    upE2E:cpMilestoneSummaryNode(city,'upstream','e2e','Upstream Testing','E2E & Rectification',upE2E,'🔁',target||'Final batch'),
+    dnDesign:cpMilestoneSummaryNode(city,'downstream','sld','Downstream Design','SLD & Validation',finalDn.length?finalDn.filter(r=>['Downstream SLD','Downstream Validation'].includes(String(r.act_type||''))):dnDesign,'🧩',dnBatch||'Final batch'),
+    dnE2E:cpMilestoneSummaryNode(city,'downstream','e2e','Downstream Testing','E2E for SFD',dnE2E,'🔁','E2E for SFD'),
+    adms:cpMilestoneSummaryNode(city,'upstream','sat','System Acceptance','ADMS SAT',adms,'🧪','ADMS SAT'),
+    upLive:cpMilestoneSummaryNode(city,'upstream','live','Cutover / Live-On','Upstream Live-On',upLive,'⚡','Cut Over - Upstream (Live-On)'),
+    dnLive:cpMilestoneSummaryNode(city,'downstream','live','Cutover / Live-On','Downstream Live-On',dnLive,'🚀','CUTOVER')
+  };
+  structure.flat=[structure.telecom,structure.upDesign,structure.upE2E,structure.dnDesign,structure.dnE2E,structure.adms,structure.upLive,structure.dnLive].filter(Boolean);
+  return structure.flat.length?structure:null;
+}
+function cpStatusClass(status){
+  if(status==='Completed') return 'completed';
+  if(status==='In Progress') return 'inprogress';
+  if(status==='Delayed') return 'delayed';
+  return 'notstarted';
+}
+function cpRingColor(status){
+  if(status==='Completed') return '#16a34a';
+  if(status==='Delayed') return '#dc2626';
+  if(status==='In Progress') return '#0060b5';
+  return '#94a3b8';
+}
+function cpNodeHtml(node,index){
+  const late=node.delay>0;
+  const planF=node.planned_finish?fmtDate(node.planned_finish):'—';
+  const expF=node.exp_finish?fmtDate(node.exp_finish):'—';
+  return `<div class="cp-node ${cpStatusClass(node.status)}">
+    <span class="cp-node-step">${index+1}</span>
+    <div class="cp-node-top">
+      <div style="min-width:0;">
+        <div class="cp-node-stage">${escHtml(node.stage)}</div>
+        <div class="cp-node-name">${node.icon} ${escHtml(node.label)}</div>
+        <div class="cp-node-batch">${escHtml(node.batch||'Project-level activity')}</div>
+      </div>
+      <div class="cp-progress-ring" style="--p:${Math.max(0,Math.min(100,node.actual))};--ring:${cpRingColor(node.status)}"><b>${node.actual}%</b></div>
+    </div>
+    <div class="cp-date-grid">
+      <div class="cp-date-box"><div class="cp-date-label">Plan Finish</div><div class="cp-date-value">${planF}</div></div>
+      <div class="cp-date-box"><div class="cp-date-label">Expected Finish</div><div class="cp-date-value ${late?'cp-exp-late':''}">${expF}</div></div>
+    </div>
+    <div class="cp-node-bottom">
+      <div class="cp-progress-row"><span>Plan to date ${node.plan}%</span><span>Actual ${node.actual}%</span></div>
+      <div class="cp-plan-track" title="Planned ${node.plan}% · Actual ${node.actual}%">
+        <div class="cp-plan-fill" style="width:${Math.max(0,Math.min(100,node.plan))}%"></div>
+        <div class="cp-actual-fill" style="width:${Math.max(0,Math.min(100,node.actual))}%;background:${cpRingColor(node.status)}"></div>
+      </div>
+      <span class="cp-delay-badge ${late?'late':''}">${late?'⚠ +'+node.delay+' days':'✓ On plan / no finish variance'}</span>
+    </div>
+  </div>`;
+}
+function setCriticalPathCity(city,btn){
+  criticalPathCity=city;
+  document.querySelectorAll('.cp-filter-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderCriticalPath();
+}
+function buildCriticalPath(){
+  const filters=document.getElementById('cpCityFilters');
+  if(filters){
+    const items=['ALL',...CP_CITY_ORDER];
+    filters.innerHTML=items.map(c=>`<button class="cp-filter-btn ${c===criticalPathCity?'active':''}" onclick="setCriticalPathCity('${c}',this)">${c==='ALL'?'All Cities':c}</button>`).join('');
+  }
+  renderCriticalPath();
+}
+function renderCriticalPath(){
+  const target=document.getElementById('criticalPathContainer');
+  const summary=document.getElementById('cpSummary');
+  if(!target||!summary) return;
+  const cities=criticalPathCity==='ALL'?CP_CITY_ORDER:[criticalPathCity];
+  const paths=cities.map(city=>({city,graph:cpNodesForCity(city)})).filter(x=>x.graph&&x.graph.flat&&x.graph.flat.length);
+  const allNodes=paths.flatMap(x=>x.graph.flat);
+  const progress=allNodes.length?Math.round(allNodes.reduce((s,n)=>s+n.actual,0)/allNodes.length):0;
+  const planned=allNodes.length?Math.round(allNodes.reduce((s,n)=>s+n.plan,0)/allNodes.length):0;
+  const latestPlan=cpDateMax(allNodes.map(n=>({d:n.planned_finish})),'d');
+  const latestExp=cpDateMax(allNodes.map(n=>({d:n.exp_finish})),'d');
+  const endDelay=latestPlan&&latestExp?diffDays(latestPlan,latestExp):0;
+  const delayedNodes=allNodes.filter(n=>n.delay>0||n.status==='Delayed').length;
+  summary.innerHTML=`
+    <div class="cp-summary-card" style="--cp-accent:#0060b5"><div class="cp-summary-label">Path Progress</div><div class="cp-summary-value">${progress}%</div><div class="cp-summary-sub">Actual across displayed critical nodes</div></div>
+    <div class="cp-summary-card" style="--cp-accent:#64748b"><div class="cp-summary-label">Planned to Date</div><div class="cp-summary-value">${planned}%</div><div class="cp-summary-sub">Time-phased plan at current cut-off</div></div>
+    <div class="cp-summary-card" style="--cp-accent:${endDelay>0?'#dc2626':'#16a34a'}"><div class="cp-summary-label">Critical Finish Variance</div><div class="cp-summary-value">${endDelay>0?'+'+endDelay+'d':'0d'}</div><div class="cp-summary-sub">Latest expected finish vs planned finish</div></div>
+    <div class="cp-summary-card" style="--cp-accent:#f59e0b"><div class="cp-summary-label">At-Risk Nodes</div><div class="cp-summary-value">${delayedNodes}</div><div class="cp-summary-sub">Delayed or forecast-late critical stages</div></div>`;
+
+  if(!paths.length){ target.innerHTML='<div class="cp-empty">No valid critical-path activities were found in the latest Excel data.</div>'; return; }
+  target.innerHTML=paths.map(({city,graph})=>{
+    const nodes=graph.flat;
+    const col=(CITY_COLORS&&CITY_COLORS[city])||'#0060b5';
+    const cityRows=visibleRows(((currentData&&currentData.cities)||{})[city]||[]);
+    const cityStats=citySummaryStats(cityRows);
+    const cityProgress=cityStats.actualPct;
+    const cityPlan=cityStats.plannedPct;
+    const lastPlan=cpDateMax(nodes.map(n=>({d:n.planned_finish})),'d');
+    const lastExp=cpDateMax(nodes.map(n=>({d:n.exp_finish})),'d');
+    const cityDelay=lastPlan&&lastExp?diffDays(lastPlan,lastExp):0;
+    const nodeOrEmpty=(node,index,label)=>node?cpNodeHtml(node,index):`<div class="cp-lane-empty">${escHtml(label)} not available</div>`;
+    const arrow='<div class="cp-connector" aria-hidden="true"></div>';
+    const upstreamNodes=[
+      [graph.upDesign,0,'SLD & Validation'],
+      [graph.telecom,1,'Telecom Readiness'],
+      [graph.upE2E,2,'E2E'],
+      [graph.adms,3,'ADMS SAT'],
+      [graph.upLive,4,'Upstream Live-On']
+    ];
+    const downstreamNodes=[
+      [graph.dnDesign,0,'SLD & Validation'],
+      [graph.dnE2E,1,'E2E for SFD'],
+      [graph.adms,2,'ADMS SAT'],
+      [graph.dnLive,3,'Downstream Live-On']
+    ];
+    const renderLane=items=>items.map((item,i)=>nodeOrEmpty(item[0],item[1],item[2])+(i<items.length-1?arrow:'')).join('');
+    const diagram=`<div class="cp-city-lanes">
+      <div class="cp-lane">
+        <div class="cp-lane-title upstream"><strong>Upstream</strong><span>SLD → Telecom → E2E → ADMS SAT → Live-On</span></div>
+        <div class="cp-lane-flow">${renderLane(upstreamNodes)}</div>
+      </div>
+      <div class="cp-lane-divider"></div>
+      <div class="cp-lane">
+        <div class="cp-lane-title downstream"><strong>Downstream</strong><span>SLD → E2E for SFD → ADMS SAT → Live-On</span></div>
+        <div class="cp-lane-flow">${renderLane(downstreamNodes)}</div>
+      </div>
+    </div>`;
+    return `<section class="cp-city-section">
+      <div class="cp-city-head">
+        <div class="cp-city-identity"><span class="cp-city-dot" style="--city-color:${col}"></span><div><div class="cp-city-name">${city}</div><div class="cp-city-meta">${nodes.length} critical stages · latest Excel forecast</div></div></div>
+        <div class="cp-city-kpis"><span class="cp-city-pill">Plan ${cityPlan}%</span><span class="cp-city-pill">Actual ${cityProgress}%</span><span class="cp-city-pill" style="${cityDelay>0?'color:#b91c1c;background:#fff1f2;border-color:#fecdd3;':''}">${cityDelay>0?'+'+cityDelay+'d':'0d variance'}</span></div>
+      </div>
+      <div class="cp-path-scroll"><div class="cp-path">${diagram}</div></div>
+    </section>`;
+  }).join('');
+}
 
 // ──────────────────────────────────────────────────────────
 // TAB SWITCHING
@@ -4901,7 +5308,9 @@ function deriveSummaryMilestones(rows, city){
   // SLD & DB + Validation. Demo rows are explicitly excluded.
   const dnSLD = pick(r => workstreamKey(r.workstream)==='Downstream' && !!r.batch_no &&
     ['Downstream SLD','Downstream Validation'].includes(String(r.act_type||'')));
-  const dnE2E = pick(r => workstreamKey(r.workstream)==='Downstream' && String(r.act_type||'')==='Downstream E2E');
+  // Downstream E2E is the project-level row such as “E2E for SFD …” for each city.
+  // Use the same detection logic as the city milestone cards so the row always appears.
+  const dnE2E = pick(r => downstreamE2ERow(r));
   const dnLive = pick(r => workstreamKey(r.workstream)==='Live On - Downstream');
 
   const milestone = (dateList, progressList) => {
@@ -5127,6 +5536,7 @@ function renderAll(){
     ['ActivityMatrix', buildActivityMatrix],
     ['Milestones', buildMilestones],
     ['Delayed', buildDelayedTab],
+    ['CriticalPath', buildCriticalPath],
     ['DetailedPlan', buildDetailedPlan]
   ];
   for(const [name, fn] of steps){
