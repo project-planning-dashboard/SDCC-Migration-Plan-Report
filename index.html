@@ -2511,6 +2511,14 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
   line-height:1!important;
   font-weight:950!important;
 }
+.delayed-bar-row{cursor:pointer;border-radius:7px;padding:2px 3px;transition:background .16s ease,transform .16s ease;}
+.delayed-bar-row:hover{background:rgba(220,38,38,.07);transform:translateX(2px);}
+.exec-summary-card-delayed{cursor:pointer;}
+.exec-summary-card-delayed:hover{box-shadow:0 10px 24px rgba(220,38,38,.13);}
+.delayed-filter-notice{display:none;align-items:center;gap:8px;padding:8px 12px;margin:0 0 10px;border-radius:9px;background:#fff1f2;border:1px solid #fecdd3;color:#9f1239;font-size:10.5px;font-weight:800;}
+.delayed-filter-notice.show{display:flex;}
+.delayed-filter-notice button{margin-left:auto;border:1px solid #fda4af;background:#fff;color:#be123c;border-radius:7px;padding:4px 8px;font-size:9px;font-weight:900;cursor:pointer;}
+
 .exec-summary-card-delayed .exec-summary-mini{
   margin-top:3px!important;
 }
@@ -2730,6 +2738,44 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
 .cp-connector:after{content:"";width:8px;height:8px;border-top:2px solid #9fb5c9;border-right:2px solid #9fb5c9;transform:rotate(45deg);position:absolute;right:6px;top:calc(50% - 4px);}
 .cp-empty{padding:28px;text-align:center;color:#71859a;font-size:12px;background:#fff;border:1px dashed #cbd9e5;border-radius:12px;}
 .cp-note{font-size:9.5px;color:#778b9e;margin-top:4px;line-height:1.5;}
+
+/* ── REMAINING PACKAGES MATRIX ── */
+.rpm-shell{background:#f7fafc;border:1px solid #dce6ef;border-radius:14px;padding:14px;}
+.rpm-topbar{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;margin-bottom:12px;}
+.rpm-title h2{margin:0;font-size:17px;color:#17324d;letter-spacing:.03em;}.rpm-title p{margin:4px 0 0;font-size:10.5px;color:#71869a;}
+.rpm-legend{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;}.rpm-legend span{padding:4px 7px;border-radius:999px;border:1px solid #dce6ef;background:#fff;font-size:8.5px;font-weight:800;color:#52677b;}
+.rpm-wrap{overflow:auto;border:1px solid #d9e4ed;border-radius:12px;background:#fff;}.rpm-table{border-collapse:separate;border-spacing:0;width:100%;min-width:1060px;font-size:10px;}
+.rpm-table th,.rpm-table td{border-right:1px solid #e3ebf2;border-bottom:1px solid #e3ebf2;padding:7px 8px;vertical-align:middle;}.rpm-table thead th{position:sticky;top:0;z-index:3;background:#eef5fb;color:#24435f;font-size:9px;text-transform:uppercase;letter-spacing:.05em;text-align:center;}
+.rpm-table thead th:first-child{left:0;z-index:5;text-align:left;min-width:285px;}
+.rpm-package-row{cursor:pointer;user-select:none;}
+.rpm-package-row td{background:linear-gradient(90deg,#eef5fb,#f8fbfd);color:#17324d;font-weight:900;padding:9px 10px;border-top:2px solid #c8d9e7;}
+.rpm-package-head{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.rpm-package-name{display:flex;align-items:center;gap:8px;text-transform:uppercase;letter-spacing:.06em;}
+.rpm-package-arrow{width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid #d6e2ec;color:#51697f;font-size:11px;transition:.18s ease;}
+.rpm-package-row.open .rpm-package-arrow{transform:rotate(90deg);}
+.rpm-package-summary{display:flex;align-items:center;gap:6px;flex-wrap:wrap;justify-content:flex-end;text-transform:none;letter-spacing:0;}
+.rpm-package-chip{padding:3px 7px;border-radius:999px;background:#fff;border:1px solid #d9e4ed;color:#52677b;font-size:8.5px;font-weight:800;white-space:nowrap;}
+.rpm-package-chip.progress{color:#005fae;border-color:#bfdbfe;background:#eff6ff;}
+.rpm-package-chip.completed{color:#15803d;border-color:#bbf7d0;background:#f0fdf4;}
+.rpm-package-chip.inprogress{color:#1d4ed8;border-color:#bfdbfe;background:#eff6ff;}
+.rpm-package-chip.delayed{color:#b91c1c;border-color:#fecaca;background:#fff1f2;}
+.rpm-package-chip.notstarted{color:#64748b;border-color:#e2e8f0;background:#f8fafc;}
+.rpm-detail-row{display:none;}
+.rpm-detail-row.rpm-visible{display:table-row;}
+.rpm-activity{position:sticky;left:0;z-index:2;background:#fff;min-width:285px;max-width:360px;}.rpm-activity strong{display:block;color:#17324d;font-size:10.5px;line-height:1.3;}.rpm-activity span{display:block;color:#7b8ea1;font-size:8.5px;margin-top:2px;}
+.rpm-cell{min-width:164px;text-align:center;background:#fff;}.rpm-cell.empty{color:#a1afbd;background:#fbfdff;}.rpm-card{border:1px solid #dfe8f0;border-radius:10px;padding:7px 8px;background:#f9fbfd;min-height:104px;}
+.rpm-card.completed{border-color:#bbf7d0;background:#f0fdf4;}.rpm-card.inprogress{border-color:#bfdbfe;background:#eff6ff;}.rpm-card.delayed{border-color:#fecaca;background:#fff1f2;}.rpm-card.notstarted{border-color:#e2e8f0;background:#f8fafc;}
+.rpm-main{display:flex;align-items:center;justify-content:space-between;gap:5px;font-weight:900;color:#17324d;}.rpm-pct{font-size:13px;}.rpm-status{font-size:8px;padding:2px 5px;border-radius:999px;background:#fff;border:1px solid rgba(100,116,139,.18);white-space:nowrap;}
+.rpm-dates-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:7px;}
+.rpm-date-box{background:rgba(255,255,255,.78);border:1px solid rgba(148,163,184,.20);border-radius:7px;padding:5px 5px;text-align:left;min-width:0;}
+.rpm-date-label{display:flex;align-items:center;gap:3px;font-size:7px;text-transform:uppercase;letter-spacing:.04em;color:#7b8ea1;font-weight:900;white-space:nowrap;}
+.rpm-date-value{font-size:8.5px;color:#29465f;font-weight:900;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.rpm-variance{margin-top:6px;border-top:1px dashed rgba(100,116,139,.25);padding-top:5px;display:flex;align-items:center;justify-content:space-between;gap:6px;font-size:8px;font-weight:900;color:#63788c;}
+.rpm-variance strong{font-size:9px;color:#15803d;}.rpm-variance strong.late{color:#b91c1c;}.rpm-variance strong.early{color:#0369a1;}
+.rpm-summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-bottom:12px;}
+.rpm-summary-card{background:#fff;border:1px solid #dce6ef;border-radius:10px;padding:9px 10px;}.rpm-summary-card b{display:block;font-size:18px;color:#17324d;}.rpm-summary-card span{font-size:8.5px;color:#71869a;text-transform:uppercase;font-weight:800;letter-spacing:.05em;}
+@media(max-width:800px){.rpm-summary{grid-template-columns:repeat(2,minmax(0,1fr));}.rpm-topbar{flex-direction:column;}.rpm-legend{justify-content:flex-start;}}
+
 @media(max-width:900px){
   .cp-summary-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
   .cp-shell{padding:12px;}
@@ -2850,6 +2896,7 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
 
 <!-- ═══ TAB: DELAYED ═══ -->
 <div class="tab-panel" id="tab-delayed">
+  <div class="delayed-filter-notice" id="delayedCityFilterNotice"><span id="delayedCityFilterText"></span><button type="button" onclick="openDelayedByCity('')">Show All Cities</button></div>
   <div class="delayed-card">
     <div class="delayed-hdr">
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
@@ -3054,7 +3101,7 @@ function buildKPIs(){
         return `
         <div class="delayed-kpi-breakdown" aria-label="Delayed activities by city, sorted highest to lowest">
           ${cityRows.map(item=>`
-            <div class="delayed-bar-row" title="${item.label}: ${item.count} delayed">
+            <div class="delayed-bar-row" role="button" tabindex="0" title="Open ${item.label} delayed activities" onclick="event.stopPropagation();openDelayedByCity('${item.key}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();event.stopPropagation();openDelayedByCity('${item.key}');}">
               <span class="delayed-city-name">${item.label}</span>
               <span class="delayed-bar-track"><span class="delayed-bar-fill" style="width:${item.count?Math.max(8,Math.round(item.count/maxCount*100)):0}%;"></span></span>
               <b class="delayed-city-count">${item.count}</b>
@@ -3062,7 +3109,7 @@ function buildKPIs(){
         </div>`;
       })() : `<div class="exec-summary-sub">${k.sub}</div>`;
       return `
-      <div class="exec-summary-card ${k.kind==='delayed'?'exec-summary-card-delayed':''}" style="--accent:${k.accent};">
+      <div class="exec-summary-card ${k.kind==='delayed'?'exec-summary-card-delayed':''}" style="--accent:${k.accent};" ${k.kind==='delayed' ? `role="button" tabindex="0" title="Open all delayed activities" onclick="openDelayedByCity('')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openDelayedByCity('');}"` : ''}>
         <div class="exec-summary-icon">${k.icon}</div>
         <div class="exec-summary-val">${k.val}</div>
         <div class="exec-summary-lbl">${k.lbl}</div>
@@ -3795,6 +3842,25 @@ function buildOverviewCharts(){
       <div><h2>DOWNSTREAM BATCH ACTIVITY MATRIX</h2><div class="hdr-sub">Downstream SLD/DB and validation status by batch · Same structure as upstream</div></div>
     </div>
     <div class="overview-section" id="downstreamMatrixSection"></div>
+
+    <div class="section-hdr" style="margin-top:18px;">
+      <div class="icon" style="background:#64748b;"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v18"/></svg></div>
+      <div><h2>REMAINING PACKAGES MATRIX</h2><div class="hdr-sub">Activities outside Upstream, Downstream, ADMS SAT and Live-On · grouped by related high-level package</div></div>
+    </div>
+    <div class="overview-section">
+      <div class="rpm-shell">
+        <div class="rpm-topbar">
+          <div class="rpm-title"><h2>REMAINING ACTIVITIES BY PACKAGE &amp; CITY</h2><p>Activities vertically · cities horizontally · grouped into related high-level packages.</p></div>
+          <div class="rpm-legend"><span>✅ Completed</span><span>🔄 In Progress</span><span>🚨 Delayed</span><span>⏳ Not Started</span></div>
+        </div>
+        <div class="rpm-wrap">
+          <table class="rpm-table">
+            <thead><tr><th>Package / Activity</th><th>Madinah</th><th>Jeddah</th><th>Makkah</th><th>Abha</th><th>Jizan</th></tr></thead>
+            <tbody id="remainingPackagesBody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
     <div class="section-hdr" style="margin-top:18px;">
       <div class="icon" style="background:var(--crit);"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
@@ -4558,6 +4624,94 @@ function renderCriticalPath(){
 }
 
 // ──────────────────────────────────────────────────────────
+// REMAINING PACKAGES MATRIX
+// ──────────────────────────────────────────────────────────
+const RPM_CITIES=['MADINAH','JEDDAH','MAKKAH','ABHA','JIZAN'];
+const RPM_EXCLUDED=new Set(['Upstream','Downstream','ADMS SAT','Upstream SAT','Downstream SAT','Live On - Upstream','Live On - Downstream']);
+function rpmPackageForRow(r){
+  const ws=workstreamKey(r&&r.workstream)||'Other';
+  const txt=`${ws} ${r&&r.activity||''} ${r&&r.act_type||''}`.toLowerCase();
+  if(ws==='Migration'||txt.includes('migration')) return 'Migration & Cutover Preparation';
+  if(ws==='Integration'||txt.includes('integration')||txt.includes('esb')||txt.includes('dnmc')||txt.includes('dc-dr')) return 'Integration & Interfaces';
+  if(ws==='Cyber Audit'||txt.includes('cyber')||txt.includes('audit')) return 'Cybersecurity & Audit';
+  if(ws==='Training'||txt.includes('training')) return 'Training & Knowledge Transfer';
+  if(ws==='DERMS'||txt.includes('derms')) return 'DERMS';
+  if(txt.includes('telecom')||txt.includes('network')||txt.includes('lan')||txt.includes('wan')||txt.includes('mpls')) return 'Telecom & Network Readiness';
+  if(txt.includes('sat')||txt.includes('test')||txt.includes('t&c')||txt.includes('commission')) return 'Testing & Commissioning';
+  return 'Other Project Activities';
+}
+function rpmActivityKey(r){return String((r&&r.activity)||'').replace(/\s+/g,' ').trim().toLowerCase();}
+function rpmAggregate(rows){
+  const list=(rows||[]).filter(Boolean); if(!list.length) return null;
+  const actual=Math.round(list.reduce((s,r)=>s+actualProgressPercent(r),0)/list.length);
+  const ps=cpDateMin(list,'planned_start');
+  const es=cpDateMin(list,'exp_start')||ps;
+  const pf=cpDateMax(list,'planned_finish');
+  const ef=cpDateMax(list,'exp_finish')||pf;
+  const delay=pf&&ef?diffDays(pf,ef):0; let status='Not Started';
+  if(actual>=100) status='Completed'; else if(delay>0||list.some(r=>statusOf(r)==='Delayed')) status='Delayed'; else if(actual>0||list.some(r=>statusOf(r)==='In Progress')) status='In Progress';
+  return {actual,status,plannedStart:cpIso(ps),expectedStart:cpIso(es),plannedFinish:cpIso(pf),expectedFinish:cpIso(ef),delay};
+}
+function rpmStatusClass(status){return status==='Completed'?'completed':status==='In Progress'?'inprogress':status==='Delayed'?'delayed':'notstarted';}
+function rpmCellHtml(v){
+  if(!v) return '<td class="rpm-cell empty">—</td>';
+  const icon=v.status==='Completed'?'✅':v.status==='In Progress'?'🔄':v.status==='Delayed'?'🚨':'⏳';
+  const variance=v.delay>0?`+${v.delay}d`:(v.delay<0?`${v.delay}d`:'0d');
+  const varianceClass=v.delay>0?'late':(v.delay<0?'early':'');
+  return `<td class="rpm-cell"><div class="rpm-card ${rpmStatusClass(v.status)}">
+    <div class="rpm-main"><span class="rpm-pct">${v.actual}%</span><span class="rpm-status">${icon} ${escHtml(v.status)}</span></div>
+    <div class="rpm-dates-grid">
+      <div class="rpm-date-box"><div class="rpm-date-label">📅 Planned Start</div><div class="rpm-date-value">${fmtDateShort(v.plannedStart)}</div></div>
+      <div class="rpm-date-box"><div class="rpm-date-label">🕒 Expected Start</div><div class="rpm-date-value">${fmtDateShort(v.expectedStart)}</div></div>
+      <div class="rpm-date-box"><div class="rpm-date-label">🏁 Planned Finish</div><div class="rpm-date-value">${fmtDateShort(v.plannedFinish)}</div></div>
+      <div class="rpm-date-box"><div class="rpm-date-label">🎯 Expected Finish</div><div class="rpm-date-value">${fmtDateShort(v.expectedFinish)}</div></div>
+    </div>
+    <div class="rpm-variance"><span>⚖ Finish Variance</span><strong class="${varianceClass}">${variance}</strong></div>
+  </div></td>`;
+}
+function toggleRemainingPackage(pkgId){
+  const header=document.querySelector(`.rpm-package-row[data-package-id="${pkgId}"]`);
+  const rows=document.querySelectorAll(`.rpm-detail-row[data-package-id="${pkgId}"]`);
+  const open=header&&header.classList.toggle('open');
+  rows.forEach(r=>r.classList.toggle('rpm-visible',!!open));
+}
+function buildRemainingPackagesMatrix(){
+  const body=document.getElementById('remainingPackagesBody'); if(!body) return;
+  const pkgMap=new Map();
+  RPM_CITIES.forEach(city=>{
+    const rows=visibleRows((((currentData||{}).cities||{})[city]||[])).filter(r=>{const ws=workstreamKey(r.workstream);return ws&&!RPM_EXCLUDED.has(ws);});
+    rows.forEach(r=>{
+      const pkg=rpmPackageForRow(r),key=rpmActivityKey(r);if(!key)return;
+      if(!pkgMap.has(pkg))pkgMap.set(pkg,new Map());
+      const acts=pkgMap.get(pkg);
+      if(!acts.has(key))acts.set(key,{label:String(r.activity||'').replace(/\s+/g,' ').trim(),workstream:workstreamKey(r.workstream)||'',cities:{}});
+      const item=acts.get(key);if(!item.cities[city])item.cities[city]=[];item.cities[city].push(r);
+    });
+  });
+  const order=['Migration & Cutover Preparation','Integration & Interfaces','Cybersecurity & Audit','Training & Knowledge Transfer','DERMS','Telecom & Network Readiness','Testing & Commissioning','Other Project Activities'];
+  const packages=[...pkgMap.keys()].sort((a,b)=>(order.indexOf(a)<0?99:order.indexOf(a))-(order.indexOf(b)<0?99:order.indexOf(b)));
+  let html='';
+  packages.forEach((pkg,pkgIndex)=>{
+    const items=[...pkgMap.get(pkg).values()].sort((a,b)=>a.label.localeCompare(b.label));
+    const packageRows=[];
+    items.forEach(item=>RPM_CITIES.forEach(city=>{packageRows.push(...(item.cities[city]||[]));}));
+    const total=packageRows.length;
+    const completed=packageRows.filter(r=>statusOf(r)==='Completed').length;
+    const inprogress=packageRows.filter(r=>statusOf(r)==='In Progress').length;
+    const delayed=packageRows.filter(r=>statusOf(r)==='Delayed').length;
+    const notstarted=packageRows.filter(r=>statusOf(r)==='Not Started').length;
+    const avg=total?Math.round(packageRows.reduce((sum,r)=>sum+actualProgressPercent(r),0)/total):0;
+    const pkgId='rpm-pkg-'+pkgIndex;
+    html+=`<tr class="rpm-package-row" data-package-id="${pkgId}" onclick="toggleRemainingPackage('${pkgId}')"><td colspan="6"><div class="rpm-package-head"><div class="rpm-package-name"><span class="rpm-package-arrow">▶</span><span>${escHtml(pkg)}</span></div><div class="rpm-package-summary"><span class="rpm-package-chip">${items.length} Activities</span><span class="rpm-package-chip progress">${avg}% Progress</span><span class="rpm-package-chip completed">✓ ${completed}</span><span class="rpm-package-chip inprogress">↻ ${inprogress}</span><span class="rpm-package-chip delayed">! ${delayed}</span><span class="rpm-package-chip notstarted">⌛ ${notstarted}</span></div></div></td></tr>`;
+    items.forEach(item=>{
+      html+=`<tr class="rpm-detail-row" data-package-id="${pkgId}"><td class="rpm-activity"><strong>${escHtml(item.label)}</strong><span>${escHtml(item.workstream)}</span></td>${RPM_CITIES.map(city=>rpmCellHtml(rpmAggregate(item.cities[city]))).join('')}</tr>`;
+    });
+  });
+  body.innerHTML=html||'<tr><td colspan="6" style="padding:24px;text-align:center;color:#71869a">No remaining package activities found.</td></tr>';
+}
+
+
+// ──────────────────────────────────────────────────────────
 // TAB SWITCHING
 // ──────────────────────────────────────────────────────────
 function switchTab(id, btn){
@@ -5140,6 +5294,28 @@ function renderMilestoneTable(){
 }
 
 let delayedRowsAll = [];
+function openDelayedByCity(city){
+  const cityKey=String(city||'').trim().toUpperCase();
+  const tabBtn=[...document.querySelectorAll('.tab-btn')].find(b=>String(b.getAttribute('onclick')||'').includes("switchTab('delayed'"));
+  if(tabBtn) switchTab('delayed',tabBtn);
+  if(typeof buildDelayedTab==='function') buildDelayedTab();
+  setTimeout(()=>{
+    const select=document.getElementById('delayedFilterCity');
+    if(select){
+      const has=[...select.options].some(o=>o.value===cityKey);
+      select.value=cityKey&&has?cityKey:'';
+    }
+    if(typeof renderDelayedFilteredTable==='function') renderDelayedFilteredTable();
+    const notice=document.getElementById('delayedCityFilterNotice');
+    const noticeText=document.getElementById('delayedCityFilterText');
+    if(notice){
+      notice.classList.toggle('show',!!cityKey);
+      if(noticeText) noticeText.textContent=cityKey ? `Showing delayed activities for ${cityKey}` : '';
+    }
+    const card=document.querySelector('#tab-delayed .delayed-card');
+    if(card) card.scrollIntoView({behavior:'smooth',block:'start'});
+  },30);
+}
 function buildDelayedTab(){
   const remarks = typeof getRemarks==='function' ? getRemarks() : {};
   delayedRowsAll = getAllRows().filter(function(r){ return rowStatus(r)==='Delayed'; }).map(function(r){
@@ -5537,6 +5713,7 @@ function renderAll(){
     ['Milestones', buildMilestones],
     ['Delayed', buildDelayedTab],
     ['CriticalPath', buildCriticalPath],
+    ['RemainingPackages', buildRemainingPackagesMatrix],
     ['DetailedPlan', buildDetailedPlan]
   ];
   for(const [name, fn] of steps){
