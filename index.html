@@ -2893,6 +2893,12 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
   .gantt-head,.gantt-row,.gantt-group-row{grid-template-columns:280px 58px 72px 72px 72px 72px 70px var(--timeline-width)!important;}
 }
 
+
+/* Manual Excel upload option */
+.excel-upload-btn{background:#fff;border-color:#b9d2e7;color:#005fae;}
+.excel-upload-btn:hover{background:#eef7ff;border-color:#7fb1d8;}
+@media(max-width:760px){.header-meta{flex-wrap:wrap}.excel-upload-btn,.excel-refresh-btn{min-height:34px;}}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -2923,6 +2929,11 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
         <span class="refresh-btn-label">Refresh Data</span>
       </button>
+      <button type="button" class="print-btn excel-upload-btn" id="manualExcelBtn" title="Upload Excel manually from this device" onclick="document.getElementById('manualExcelInput').click()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M20 15v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4"/></svg>
+        Upload Excel
+      </button>
+      <input id="manualExcelInput" type="file" accept=".xlsx,.xls,.xlsm" style="display:none" onchange="handleXlsxUpload(event)">
     </div>
   </div>
 </div>
@@ -5936,7 +5947,7 @@ function parseXlsxBuffer(buffer){
     const ci=(name,fallback)=>Object.prototype.hasOwnProperty.call(headers,name)?headers[name]:fallback;
     const rootCauseHeader = Object.keys(headers).find(h => /root\s*(cause|cuase).*delay|delay.*root\s*(cause|cuase)/i.test(h));
     const remarkHeader = Object.keys(headers).find(h => /^remarks?$/.test(h));
-    const C={batch:1,workstream:ci('workstream',2),activity:ci('activity',3),plannedStart:ci('planned start',5),plannedFinish:ci('planned finish',6),expectedStart:ci('expected start',7),expectedFinish:ci('expected finish',8),actualStart:ci('actual start / expected start',9),actualFinish:ci('actual finish / expected finish',10),progress:ci('% progress',11),status:ci('status',12),assignedResources:(Object.keys(headers).find(h=>/(assigned\s*resources?|assigned\s*resouces?|resources?\s*assigned|resouces?\s*assigned|assigned\s*to|resource\s*count)/i.test(h))||null),rootCause:rootCauseHeader!==undefined?headers[rootCauseHeader]:null,remark:remarkHeader!==undefined?headers[remarkHeader]:ci('remark',22)};
+    const C={batch:1,workstream:ci('workstream',2),activity:ci('activity',3),plannedStart:ci('planned start',5),plannedFinish:ci('planned finish',6),expectedStart:ci('expected start',7),expectedFinish:ci('expected finish',8),actualStart:ci('actual start / expected start',9),actualFinish:ci('actual finish / expected finish',10),progress:ci('% progress',11),status:ci('status',12),assignedResources:(Object.keys(headers).find(h=>/(assigned\s*resources?|assigned\s*resouces?|assigned\s*rsouces?|resources?\s*assigned|resouces?\s*assigned|rsouces?\s*assigned|assigned\s*to|resource\s*count)/i.test(h))||null),rootCause:rootCauseHeader!==undefined?headers[rootCauseHeader]:null,remark:remarkHeader!==undefined?headers[remarkHeader]:ci('remark',22)};
     let currentGroup='';const rows=[];
     for(let r=headerRow+1;r<=range.e.r;r++){
       const group=clean(cell(ws,r,C.batch));if(group)currentGroup=group;
