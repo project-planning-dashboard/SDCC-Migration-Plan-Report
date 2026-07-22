@@ -2793,6 +2793,64 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
   .cp-node{width:205px;}
 }
 
+
+/* ── RESOURCE-LOADED DETAILED GANTT ── */
+.gantt-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:12px 0}.gantt-kpi{background:#fff;border:1px solid #dbe6ef;border-radius:12px;padding:11px 13px;box-shadow:0 4px 12px rgba(20,58,94,.05)}.gantt-kpi small{display:block;font-size:8.5px;text-transform:uppercase;letter-spacing:.07em;color:#73879a;font-weight:900}.gantt-kpi b{display:block;font-size:20px;color:#17324d;margin-top:4px}.gantt-kpi span{font-size:9px;color:#8091a3}.gantt-shell{background:#fff;border:1px solid #d9e5ef;border-radius:14px;overflow:hidden}.gantt-toolbar{display:flex;justify-content:space-between;gap:15px;padding:13px 15px;background:linear-gradient(90deg,#f7fbff,#fff);border-bottom:1px solid #dbe7f1}.gantt-toolbar h2{font-size:14px;margin:0;color:#17324d}.gantt-toolbar p{font-size:9.5px;margin:3px 0 0;color:#74889b}.gantt-legend{display:flex;gap:9px;align-items:center;flex-wrap:wrap;font-size:9px;font-weight:800;color:#52687d}.gantt-legend span{display:flex;align-items:center;gap:4px}.gleg{width:14px;height:6px;border-radius:3px}.gleg.planned{background:#f5c84c}.gleg.expected{background:#8b5cf6}.gleg.completed{background:#22c55e}.gleg.delayed{background:#ef4444}.gantt-scroll{overflow:auto;max-height:790px;cursor:grab;user-select:none;scrollbar-gutter:stable}.gantt-scroll.dragging{cursor:grabbing}.gantt-scroll.dragging *{pointer-events:none}.gantt-grid{display:grid;min-width:max-content;position:relative}.gantt-head,.gantt-row{display:grid;grid-template-columns:310px 62px 72px 72px 82px var(--timeline-width);min-height:38px}.gantt-head{position:sticky;top:0;z-index:15;background:#eef5fb;border-bottom:2px solid #9fb7ca}.gantt-head>div,.gantt-row>div{border-right:1px solid #dce6ee;border-bottom:1px solid #e5edf3}.gantt-hcell{padding:7px 8px;font-size:8px;font-weight:900;text-transform:uppercase;color:#38536c;display:flex;align-items:center;justify-content:center}.gantt-hcell.activity{justify-content:flex-start}.gantt-left{padding:7px 9px;background:#fff;position:sticky;left:0;z-index:5}.gantt-row:hover .gantt-left{background:#f7fbff}.gantt-activity{font-size:10.5px;font-weight:850;color:#17324d;line-height:1.25}.gantt-meta{font-size:8.5px;color:#71869a;margin-top:2px}.gantt-cell{display:flex;align-items:center;justify-content:center;font-size:9px;color:#405b73;background:#fff;padding:4px}.gantt-resource{font-weight:900;color:#17324d}.gantt-timeline-head{position:relative;height:54px;background:#f8fbfd}.gantt-month{position:absolute;top:0;height:24px;border-right:1px solid #9fb7ca;background:#eaf3fa;font-size:9px;font-weight:900;display:flex;align-items:center;justify-content:center;color:#244763}.gantt-day{position:absolute;top:24px;width:var(--day-width);height:30px;border-right:1px solid #e0e7ee;font-size:7.5px;display:flex;flex-direction:column;align-items:center;justify-content:center;color:#50697e}.gantt-day.weekend{background:#edf0f3}.gantt-day.today{border-left:2px solid #ec4899}.gantt-timeline{position:relative;background:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--day-width) - 1px),#edf1f5 calc(var(--day-width) - 1px),#edf1f5 var(--day-width));min-height:38px}.gantt-weekend{position:absolute;top:0;bottom:0;background:rgba(148,163,184,.16)}.gantt-bar{position:absolute;height:15px;top:5px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#17324d;overflow:hidden;min-width:4px}.gantt-bar.plan{background:#fde68a;border:1px solid #f6c344}.gantt-bar.expected{top:21px;height:11px;background:#c4b5fd;border:1px solid #8b5cf6;color:#4c1d95}.gantt-bar.completed{background:#bbf7d0;border-color:#22c55e}.gantt-bar.delayed{background:#fecaca;border-color:#ef4444;color:#991b1b}.gantt-group-row{display:grid;grid-template-columns:620px var(--timeline-width);min-height:34px;background:#eaf2f8;border-top:1px solid #b9cddd;border-bottom:1px solid #b9cddd;font-size:10px;font-weight:900;color:#17324d}.gantt-group-row>div{padding:8px 10px}.resource-histogram-wrap{padding:14px 15px;border-top:1px solid #dce7ef;background:#fbfdff}.resource-histogram-title{display:flex;justify-content:space-between;font-size:10px;color:#17324d;margin-bottom:8px}.resource-histogram-title span{font-size:9px;color:#71869a}.resource-chart{height:150px;display:flex;align-items:flex-end;gap:2px;border-left:1px solid #b9c8d5;border-bottom:1px solid #b9c8d5;padding:4px 4px 0;overflow:hidden}.resource-col{flex:1;min-width:5px;background:#7aa7c7;border-radius:2px 2px 0 0;position:relative}.resource-col.peak{background:#f59e0b}.resource-col:hover:after{content:attr(data-tip);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#17324d;color:#fff;padding:4px 6px;border-radius:4px;font-size:8px;white-space:nowrap;z-index:10}@media(max-width:900px){.gantt-kpis{grid-template-columns:repeat(2,1fr)}}
+.gantt-zoom-control{display:flex;align-items:center;gap:6px;padding:4px 7px;background:#f6f9fc;border:1px solid #dce6ef;border-radius:9px}.gantt-zoom-btn{width:28px;height:28px;border:1px solid #cbd9e5;border-radius:7px;background:#fff;color:#17324d;font-weight:900;cursor:pointer}.gantt-zoom-btn:hover{background:#eaf3fa}.gantt-zoom-range{width:120px;accent-color:#0060b5}.gantt-zoom-label{font-size:9px;font-weight:900;color:#5d7185;min-width:38px;text-align:center}.detail-filters.gantt-filter-grid{display:grid!important;grid-template-columns:minmax(190px,1.2fr) repeat(5,minmax(135px,.8fr)) auto;gap:10px;align-items:end}.detail-filters.gantt-filter-grid .filter-field{min-width:0}.detail-filters.gantt-filter-grid .detail-search{width:100%!important;min-width:0!important}.detail-filters.gantt-filter-grid .filter-btn{height:36px;align-self:end}@media(max-width:1250px){.detail-filters.gantt-filter-grid{grid-template-columns:repeat(4,minmax(150px,1fr))}}
+
+/* ── DETAILED PLAN: planned-only Gantt + forecast extension ── */
+.gantt-head,.gantt-row{grid-template-columns:290px 56px 64px 58px 78px 78px 78px 78px var(--timeline-width);}
+.gantt-group-row{grid-template-columns:790px var(--timeline-width);}
+.gantt-bar{top:11px;height:16px;color:#17324d;z-index:2;}
+.gantt-bar.plan{background:#dbeafe;border:1px solid #60a5fa;}
+.gantt-bar.inprogress{background:#fef3c7;border:1px solid #f59e0b;color:#92400e;}
+.gantt-bar.delayed{background:#fecaca;border:1px solid #ef4444;color:#991b1b;}
+.gantt-bar.completed{background:#dcfce7;border:1px solid #22c55e;color:#166534;}
+.gantt-forecast-extension{position:absolute;top:11px;height:16px;border-top:2px dashed #ef4444;border-bottom:2px dashed #ef4444;border-right:2px dashed #ef4444;border-radius:0 4px 4px 0;background:rgba(254,226,226,.20);z-index:1;}
+.gantt-day.weekend,.gantt-weekend{background:rgba(148,163,184,.20)}
+.gantt-lookahead-bar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:8px 0 12px;}
+.gantt-lookahead-btn{border:1px solid #cbd9e5;background:#fff;color:#486177;border-radius:999px;padding:6px 10px;font-size:9px;font-weight:850;cursor:pointer;}
+.gantt-lookahead-btn:hover{border-color:#8eb6d8;color:#005a9c}.gantt-lookahead-btn.active{background:#17324d;color:#fff;border-color:#17324d;}
+.gantt-scale-switch{display:flex;align-items:center;gap:5px;padding:4px;background:#eef4f8;border:1px solid #d7e2eb;border-radius:10px;}
+.gantt-scale-btn{border:0;background:transparent;color:#587086;padding:6px 10px;border-radius:7px;font-size:9px;font-weight:900;cursor:pointer;}
+.gantt-scale-btn:hover{color:#005fae;background:#fff;}.gantt-scale-btn.active{background:#17324d;color:#fff;box-shadow:0 2px 6px rgba(23,50,77,.16);}
+.gantt-period{position:absolute;top:24px;height:30px;border-right:1px solid #cbd8e3;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#405d75;background:#f8fbfd;white-space:nowrap;overflow:hidden;}
+.resource-daily-scroll{overflow-x:auto;padding-bottom:5px;}
+.resource-daily-grid{display:flex;align-items:flex-end;gap:0;min-width:max-content;height:178px;border-left:1px solid #b9c8d5;border-bottom:1px solid #b9c8d5;padding-top:8px;}
+.resource-day-wrap{width:28px;flex:0 0 28px;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;border-right:1px solid #edf1f5;position:relative;}
+.resource-day-wrap.friday{background:rgba(148,163,184,.15);}
+.resource-day-bar{width:17px;min-height:2px;border-radius:3px 3px 0 0;background:#7aa7c7;position:relative;}
+.resource-day-bar.peak{background:#f59e0b;}.resource-day-bar:hover:after{content:attr(data-tip);position:absolute;bottom:calc(100% + 4px);left:50%;transform:translateX(-50%);background:#17324d;color:#fff;padding:4px 6px;border-radius:4px;font-size:8px;white-space:nowrap;z-index:20;}
+.resource-day-value{font-size:8px;font-weight:900;color:#17324d;line-height:14px;height:14px;}.resource-day-label{font-size:7px;color:#64788d;height:24px;line-height:11px;text-align:center;padding-top:2px;}
+
+.gantt-legend .gleg.expected{background:transparent;border:2px dashed #ef4444;height:8px;}
+@media(max-width:1000px){.gantt-head,.gantt-row{grid-template-columns:260px 52px 60px 54px 72px 72px 72px 72px var(--timeline-width)}}
+
+
+/* ── DETAILED GANTT: frozen data columns + critical path filter ── */
+.gantt-head,.gantt-row{grid-template-columns:310px 62px 72px 62px 78px 78px 78px 78px var(--timeline-width)!important;}
+.gantt-group-row{grid-template-columns:900px var(--timeline-width)!important;}
+.gantt-head>div:nth-child(-n+9),.gantt-row>div:nth-child(-n+9){position:sticky;z-index:8;background:#fff;}
+.gantt-head>div:nth-child(-n+9){z-index:25;background:#eef5fb;}
+.gantt-head>div:nth-child(1),.gantt-row>div:nth-child(1){left:0}.gantt-head>div:nth-child(2),.gantt-row>div:nth-child(2){left:310px}.gantt-head>div:nth-child(3),.gantt-row>div:nth-child(3){left:372px}.gantt-head>div:nth-child(4),.gantt-row>div:nth-child(4){left:444px}.gantt-head>div:nth-child(5),.gantt-row>div:nth-child(5){left:506px}.gantt-head>div:nth-child(6),.gantt-row>div:nth-child(6){left:584px}.gantt-head>div:nth-child(7),.gantt-row>div:nth-child(7){left:662px}.gantt-head>div:nth-child(8),.gantt-row>div:nth-child(8){left:740px}.gantt-head>div:nth-child(9),.gantt-row>div:nth-child(9){left:818px;box-shadow:5px 0 8px rgba(23,50,77,.08)}
+.gantt-group-row>div:first-child{position:sticky;left:0;z-index:12;background:#eaf2f8;box-shadow:5px 0 8px rgba(23,50,77,.07)}
+
+/* WBS summary rows use the same frozen columns as activity rows */
+.gantt-group-row{grid-template-columns:310px 62px 72px 62px 78px 78px 78px 78px var(--timeline-width)!important;min-height:48px!important;cursor:default!important;}
+.gantt-group-row>div{padding:6px 8px!important;border-right:1px solid #c9d9e6;border-bottom:1px solid #b9cddd;display:flex;align-items:center;justify-content:center;background:#eaf2f8;}
+.gantt-group-row>div:first-child{justify-content:flex-start;cursor:pointer!important;}
+.gantt-group-row>div:nth-child(-n+8){position:sticky;z-index:12;background:#eaf2f8;}
+.gantt-group-row>div:nth-child(1){left:0}.gantt-group-row>div:nth-child(2){left:310px}.gantt-group-row>div:nth-child(3){left:372px}.gantt-group-row>div:nth-child(4){left:444px}.gantt-group-row>div:nth-child(5){left:506px}.gantt-group-row>div:nth-child(6){left:584px}.gantt-group-row>div:nth-child(7){left:662px}.gantt-group-row>div:nth-child(8){left:740px;box-shadow:5px 0 8px rgba(23,50,77,.08)}
+.gantt-group-row:hover>div:nth-child(-n+8){background:#dfeaf3;}
+.gantt-group-summary-cell{font-size:8.5px;font-weight:900;color:#27465f;text-align:center;line-height:1.15;}
+.gantt-group-progress{font-size:10px;color:#17324d;}
+.gantt-group-res-total{font-size:10px;color:#17324d;}
+.gantt-group-timeline{min-height:48px!important;position:relative!important;padding:0!important;}
+.gantt-group-bar{top:5px!important;height:15px!important;z-index:1;}
+.gantt-group-extension{top:5px!important;height:15px!important;z-index:1;}
+.gantt-group-resource{top:27px!important;height:15px!important;z-index:2;}
+.gantt-group-row{cursor:pointer;transition:.15s ease}.gantt-group-row:hover{background:#dfeaf3}.gantt-group-row:hover>div:first-child{background:#dfeaf3}.gantt-group-label{display:flex;align-items:center;gap:7px}.gantt-group-arrow{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#fff;border:1px solid #b9cddd;font-size:9px;transition:transform .16s ease}.gantt-group-row.collapsed .gantt-group-arrow{transform:rotate(-90deg)}.gantt-group-timeline{position:relative;min-height:34px;background:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--day-width) - 1px),rgba(237,241,245,.8) calc(var(--day-width) - 1px),rgba(237,241,245,.8) var(--day-width));padding:0!important}.gantt-group-bar{position:absolute;top:8px;height:16px;border-radius:4px;background:#bfd7ea;border:1px solid #5f8fb5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#17324d;overflow:hidden;white-space:nowrap}.gantt-group-bar.delayed{background:#fecaca;border-color:#ef4444;color:#991b1b}.gantt-group-bar.inprogress{background:#fef3c7;border-color:#f59e0b;color:#92400e}.gantt-group-bar.completed{background:#dcfce7;border-color:#22c55e;color:#166534}.gantt-group-extension{position:absolute;top:8px;height:16px;border-top:2px dashed #ef4444;border-bottom:2px dashed #ef4444;border-right:2px dashed #ef4444;border-radius:0 4px 4px 0;background:rgba(254,226,226,.16)}.gantt-group-resource{position:absolute;top:7px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:3px;background:#dbeafe;border:1px solid #60a5fa;color:#17324d;font-size:8px;font-weight:900;box-sizing:border-box;z-index:2}.gantt-group-resource.zero{display:none}.gantt-task-resource{position:absolute;top:11px;height:16px;display:grid;place-items:center;text-align:center;line-height:1;padding:0;margin:0;font-size:8px;font-weight:900;color:#17324d;z-index:6;pointer-events:none;box-sizing:border-box;background:rgba(255,255,255,.32);border-left:1px solid rgba(37,99,235,.28);border-right:1px solid rgba(37,99,235,.28);overflow:hidden}.gantt-task-resource.friday{display:none}.gantt-group-row .gantt-group-timeline{cursor:default}.gantt-group-row>div:first-child{cursor:pointer}.gantt-group-arrow{pointer-events:none}
+.detail-filters.gantt-filter-grid{grid-template-columns:minmax(210px,1.3fr) repeat(5,minmax(135px,.8fr)) auto!important;}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -2931,30 +2989,36 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
 <!-- ═══ TAB: DETAILED PLAN ═══ -->
 <div class="tab-panel" id="tab-detailed">
   <div class="detail-filters" id="detailFilters">
-    <input type="text" class="detail-search" id="detailSearch" placeholder="🔍  Search activities…" oninput="filterDetailTable()"/>
+    <input type="text" class="detail-search" id="detailSearch" placeholder="🔍 Search activities, city or batch…" oninput="filterDetailTable()"/>
     <button class="filter-btn active" onclick="setDetailFilter('all',this)">All</button>
     <button class="filter-btn" onclick="setDetailFilter('MADINAH',this)">Madinah</button>
-    <button class="filter-btn" onclick="setDetailFilter('ABHA',this)">Abha</button>
-    <button class="filter-btn" onclick="setDetailFilter('JIZAN',this)">Jizan</button>
     <button class="filter-btn" onclick="setDetailFilter('JEDDAH',this)">Jeddah</button>
     <button class="filter-btn" onclick="setDetailFilter('MAKKAH',this)">Makkah</button>
+    <button class="filter-btn" onclick="setDetailFilter('ABHA',this)">Abha</button>
+    <button class="filter-btn" onclick="setDetailFilter('JIZAN',this)">Jizan</button>
     <button class="filter-btn" onclick="setDetailFilter('Completed',this)">✅ Completed</button>
     <button class="filter-btn" onclick="setDetailFilter('In Progress',this)">🔄 In Progress</button>
     <button class="filter-btn" onclick="setDetailFilter('Delayed',this)">🚨 Delayed</button>
     <button class="filter-btn" onclick="setDetailFilter('Not Started',this)">⏳ Not Started</button>
   </div>
-  <div class="detail-table-wrap">
-    <table class="detail-table">
-      <thead>
-        <tr>
-          <th>Activity</th><th>City</th><th>Batch</th><th>Type</th>
-          <th>Planned Start</th><th>Planned Finish</th>
-          <th>Expected Start</th><th>Expected Finish</th>
-          <th>Progress</th><th>Status</th>
-        </tr>
-      </thead>
-      <tbody id="detailBody"></tbody>
-    </table>
+  <div class="gantt-lookahead-bar" id="ganttLookaheadFilters">
+    <button class="gantt-lookahead-btn active" onclick="setGanttWindow('all',this)">All Activities</button>
+    <button class="gantt-lookahead-btn" onclick="setGanttWindow('due',this)">Due to Date · Unfinished</button>
+    <button class="gantt-lookahead-btn" onclick="setGanttWindow('1w',this)">1 Week Lookahead</button>
+    <button class="gantt-lookahead-btn" onclick="setGanttWindow('2w',this)">Biweekly Lookahead</button>
+    <button class="gantt-lookahead-btn" onclick="setGanttWindow('1m',this)">1 Month Lookahead</button>
+  </div>
+  <div class="gantt-shell">
+    <div class="gantt-toolbar">
+      <div><h2>DETAILED PLAN · RESOURCE-LOADED GANTT</h2><p>Planned bars with forecast extension and Excel-driven resource assignments.</p></div>
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end;">
+        <div class="gantt-scale-switch" aria-label="Timeline scale"><button class="gantt-scale-btn active" onclick="setGanttScale('daily',this)">Daily</button><button class="gantt-scale-btn" onclick="setGanttScale('weekly',this)">Weekly</button><button class="gantt-scale-btn" onclick="setGanttScale('monthly',this)">Monthly</button></div>
+        <div class="gantt-zoom-control" title="Resize the timeline like Primavera"><button class="gantt-zoom-btn" type="button" onclick="adjustGanttZoom(-10)">−</button><input id="ganttZoomRange" class="gantt-zoom-range" type="range" min="50" max="220" step="5" value="100" oninput="setGanttZoom(this.value)"><button class="gantt-zoom-btn" type="button" onclick="adjustGanttZoom(10)">+</button><span class="gantt-zoom-label" id="ganttZoomLabel">100%</span></div>
+        <div class="gantt-legend"><span><i class="gleg planned"></i>Not Started</span><span><i class="gleg inprogress" style="background:#fef3c7;border:1px solid #f59e0b;"></i>In Progress</span><span><i class="gleg completed"></i>Completed</span><span><i class="gleg delayed"></i>Delayed</span><span><i class="gleg expected"></i>Forecast Extension</span></div>
+      </div>
+    </div>
+    <div class="gantt-scroll" id="ganttScroll"><div id="detailedGantt"></div></div>
+    <div class="resource-histogram-wrap"><div class="resource-histogram-title"><b>RESOURCE LOADING</b><span>Daily assigned resources across filtered activities</span></div><div id="resourceHistogram"></div></div>
   </div>
 </div>
 
@@ -5219,15 +5283,16 @@ function buildAdvancedFilterBars(){
 
   const detailBar = document.getElementById('detailFilters');
   if(detailBar){
-    const v = ['City','Batch','Workstream','Type','Status','Search'].reduce((o,k)=>{o[k]=(document.getElementById('detailFilter'+k)||{}).value||''; return o;},{});
-    detailBar.style.cssText = 'background:rgba(255,255,255,.72);border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:16px;box-shadow:var(--sh-xs);';
+    const v = ['City','Batch','Workstream','Status','Path','Search'].reduce((o,k)=>{o[k]=(document.getElementById('detailFilter'+k)||{}).value||''; return o;},{});
+    detailBar.classList.add('gantt-filter-grid');
+    detailBar.style.cssText = 'background:rgba(255,255,255,.72);border:1.5px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:var(--sh-xs);';
     detailBar.innerHTML =
-      '<input type="text" class="detail-search" id="detailFilterSearch" placeholder="🔍 Search activities…" value="'+escHtml(v.Search)+'" oninput="renderDetailTable()"/>'+
+      '<div class="filter-field"><label>Search</label><input type="text" class="detail-search" id="detailFilterSearch" placeholder="🔍 Search activities…" value="'+escHtml(v.Search)+'" oninput="renderDetailTable()"/></div>'+
       selectHtml('detailFilterCity','City',cities,'All Cities',v.City)+
       selectHtml('detailFilterBatch','Batch',batches,'All Batches',v.Batch)+
       selectHtml('detailFilterWorkstream','Workstream',workstreams,'All Workstreams',v.Workstream)+
-      selectHtml('detailFilterType','Type',types,'All Types',v.Type)+
       selectHtml('detailFilterStatus','Status',statuses,'All Status',v.Status)+
+      selectHtml('detailFilterPath','Critical Path',['Critical Path','Non-Critical'],'All Activities',v.Path)+
       '<button class="filter-btn active" onclick="clearAdvancedFilters(\'detailFilter\')">Clear</button>';
   }
 }
@@ -5393,6 +5458,157 @@ function renderDetailTable(){
 }
 function setDetailFilter(){ renderDetailTable(); }
 function filterDetailTable(){ renderDetailTable(); }
+
+
+// ── RESOURCE-LOADED DETAILED GANTT OVERRIDE ──
+let ganttWindowFilter='all';
+let ganttTimelineScale='daily';
+let ganttZoomPercent=100;
+function setGanttScale(mode,btn){ganttTimelineScale=mode;document.querySelectorAll('.gantt-scale-btn').forEach(b=>b.classList.remove('active'));if(btn)btn.classList.add('active');renderDetailTable();}
+function setGanttZoom(value){ganttZoomPercent=Math.max(50,Math.min(220,Number(value)||100));const lbl=document.getElementById('ganttZoomLabel');if(lbl)lbl.textContent=ganttZoomPercent+'%';renderDetailTable();}
+function adjustGanttZoom(delta){const input=document.getElementById('ganttZoomRange');const next=Math.max(50,Math.min(220,ganttZoomPercent+delta));if(input)input.value=next;setGanttZoom(next);}
+function enableGanttDragScroll(){
+  const el=document.getElementById('ganttScroll');if(!el||el.dataset.dragReady==='1')return;el.dataset.dragReady='1';
+  let down=false,startX=0,startY=0,scrollLeft=0,scrollTop=0;
+  el.addEventListener('mousedown',e=>{if(e.button!==0||e.target.closest('input,button,select,a,.gantt-group-row>div:first-child'))return;down=true;startX=e.clientX;startY=e.clientY;scrollLeft=el.scrollLeft;scrollTop=el.scrollTop;el.classList.add('dragging');});
+  window.addEventListener('mousemove',e=>{if(!down)return;e.preventDefault();el.scrollLeft=scrollLeft-(e.clientX-startX);el.scrollTop=scrollTop-(e.clientY-startY);});
+  window.addEventListener('mouseup',()=>{down=false;el.classList.remove('dragging');});
+  el.addEventListener('mouseleave',()=>{if(down)el.classList.remove('dragging');});
+}
+function ganttResourceKey(r){return `${r.city||''}|${r.source_row||''}|${r.activity||''}`;}
+function ganttAssignedResource(r){
+  // Excel is the single source of truth for resource assignments.
+  const candidates=[r.assigned_resources,r.resources_assigned,r.assigned_to,r.resource_count,r.resources];
+  for(const v of candidates){
+    if(v!==undefined&&v!==null&&String(v).trim()!==''){
+      const n=Number(String(v).replace(/[^0-9.\-]/g,''));
+      return isFinite(n)?n:0;
+    }
+  }
+  return 0;
+}
+function setGanttWindow(mode,btn){
+  ganttWindowFilter=mode;
+  document.querySelectorAll('.gantt-lookahead-btn').forEach(b=>b.classList.remove('active'));
+  if(btn)btn.classList.add('active');
+  renderDetailTable();
+}
+function ganttDayUTC(d){const x=parseDateValue(d);return x?Date.UTC(x.getUTCFullYear(),x.getUTCMonth(),x.getUTCDate()):null;}
+function ganttMatchesWindow(r){
+  if(ganttWindowFilter==='all') return true;
+  const pf=ganttDayUTC(r.planned_finish); if(!pf) return false;
+  const now=new Date(), today=Date.UTC(now.getFullYear(),now.getMonth(),now.getDate());
+  const status=statusOf(r);
+  if(ganttWindowFilter==='due') return pf<=today && status!=='Completed';
+  const days=ganttWindowFilter==='1w'?7:ganttWindowFilter==='2w'?14:30;
+  return pf>today && pf<=today+days*86400000;
+}
+function ganttIsCritical(r){const city=String(r&&r.city||'').toUpperCase(),ws=workstreamKey(r&&r.workstream),target={MADINAH:'Batch 10',JEDDAH:'Batch 10',MAKKAH:'Batch 10',ABHA:'Batch 08',JIZAN:'Batch 08'}[city]||'',act=String(r&&r.activity||'').toLowerCase(),type=String(r&&r.act_type||'');if(ws==='ADMS SAT'||ws==='Live On - Upstream'||ws==='Live On - Downstream')return true;if(ws==='Upstream'){if(/telecom\s*(readiness|rediness)/i.test(act))return true;return(!target||String(r.batch_no||'')===target)&&['SLD Submission','SLD Validation','E2E for Grid SS','E2E Rectification'].includes(type)}if(ws==='Downstream'){if(downstreamE2ERow(r))return true;const all=((currentData&&currentData.cities&&currentData.cities[city])||[]).filter(x=>workstreamKey(x.workstream)==='Downstream'),last=cpLatestBatch(all);return String(r.batch_no||'')===last&&['Downstream SLD','Downstream Validation'].includes(type)}return false}
+function ganttSectionRank(r){const ws=workstreamKey(r&&r.workstream);if(ws==='Upstream')return 0;if(ws==='Downstream')return 1;if(ws==='ADMS SAT')return 2;if(ws==='Live On - Upstream'||ws==='Live On - Downstream')return 3;return 4}
+function ganttRemainingPackageRank(r){const o=['Migration & Cutover Preparation','Integration & Interfaces','Cybersecurity & Audit','Training & Knowledge Transfer','DERMS','Telecom & Network Readiness','Testing & Commissioning','Other Project Activities'],i=o.indexOf(rpmPackageForRow(r));return i<0?99:i}
+function ganttDownstreamSubRank(r){if(ganttSectionRank(r)!==1)return 0;return downstreamE2ERow(r)?1:0}
+function ganttSectionLabel(r){const x=ganttSectionRank(r);return x===0?'01 · UPSTREAM':x===1?'02 · DOWNSTREAM':x===2?'03 · ADMS SAT':x===3?'04 · CUTOVER / LIVE-ON':'05 · REMAINING ACTIVITIES · '+rpmPackageForRow(r)}
+const ganttCollapsedGroups=new Set();
+function toggleGanttGroup(key){
+  if(ganttCollapsedGroups.has(key)) ganttCollapsedGroups.delete(key); else ganttCollapsedGroups.add(key);
+  renderDetailTable();
+}
+function ganttGroupSafeKey(v){return String(v||'').replace(/[^a-z0-9_-]+/gi,'_');}
+function ganttFilteredRows(){
+  const q=((document.getElementById('detailFilterSearch')||document.getElementById('detailSearch')||{}).value||'').toLowerCase();
+  const path=((document.getElementById('detailFilterPath')||{}).value||'');
+  return (allDetailRows||[]).filter(r=>{const critical=ganttIsCritical(r),pathOk=!path||(path==='Critical Path'?critical:!critical);return matchCommonFilters(r,'detailFilter')&&pathOk&&ganttMatchesWindow(r)&&(!q||`${r.activity||''} ${r.city||''} ${r.batch_no||''} ${r.workstream||''} ${ganttAssignedResource(r)}`.toLowerCase().includes(q))});
+}
+function buildDetailedPlan(){allDetailRows=getAllRows();buildAdvancedFilterBars();renderDetailTable();}
+function renderDetailTable(){
+  const rows=ganttFilteredRows(); const root=document.getElementById('detailedGantt'); if(!root)return;
+  if(!rows.length){root.innerHTML='<div class="no-data" style="padding:35px">No activities match the selected filters</div>';const h=document.getElementById('resourceHistogram');if(h)h.innerHTML='';return;}
+  const datedStarts=rows.map(r=>ganttDayUTC(r.planned_start)).filter(Number.isFinite);
+  const datedEnds=rows.map(r=>ganttDayUTC(r.exp_finish)||ganttDayUTC(r.planned_finish)).filter(Number.isFinite);
+  if(!datedStarts.length||!datedEnds.length){root.innerHTML='<div class="no-data">No valid schedule dates</div>';return;}
+  const DAY=86400000;
+  const sourceYear=new Date(Math.min(...datedStarts)).getUTCFullYear();
+  let min=Date.UTC(sourceYear,6,1); // Start timeline from 01-Jul.
+  let max=Math.max(...datedEnds)+3*DAY;
+  if(max<min)max=min;
+  const days=Math.round((max-min)/DAY)+1;
+  const baseDw=ganttTimelineScale==='daily'?20:(ganttTimelineScale==='weekly'?7:3); const dw=Math.max(2,baseDw*(ganttZoomPercent/100)); const tw=days*dw;
+  const dateAt=i=>new Date(min+i*DAY); const left=d=>((ganttDayUTC(d)-min)/DAY)*dw; const width=(a,b)=>Math.max(dw,((ganttDayUTC(b)-ganttDayUTC(a))/DAY+1)*dw);
+  let months='',dayheads='',weekends=''; let mStart=0,lastKey='';
+  for(let i=0;i<days;i++){
+    const d=dateAt(i),key=d.getUTCFullYear()+'-'+d.getUTCMonth();
+    if(key!==lastKey){if(lastKey)months+=`<div class="gantt-month" style="left:${mStart*dw}px;width:${(i-mStart)*dw}px">${dateAt(mStart).toLocaleDateString('en-GB',{month:'short',year:'numeric',timeZone:'UTC'})}</div>`;mStart=i;lastKey=key;}
+    const off=d.getUTCDay()===5;
+    if(ganttTimelineScale==='daily') dayheads+=`<div class="gantt-day ${off?'weekend':''}" style="left:${i*dw}px"><b>${d.getUTCDate()}</b><span>${['S','M','T','W','T','F','S'][d.getUTCDay()]}</span></div>`;
+    if(ganttTimelineScale==='weekly' && (i===0 || d.getUTCDay()===0)){
+      const span=Math.min(7,days-i);dayheads+=`<div class="gantt-period" style="left:${i*dw}px;width:${span*dw}px">Wk ${d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',timeZone:'UTC'})}</div>`;
+    }
+    if(ganttTimelineScale==='monthly' && (i===0 || d.getUTCDate()===1)){
+      let span=1;while(i+span<days&&dateAt(i+span).getUTCMonth()===d.getUTCMonth())span++;dayheads+=`<div class="gantt-period" style="left:${i*dw}px;width:${span*dw}px">${d.toLocaleDateString('en-GB',{month:'short',year:'2-digit',timeZone:'UTC'})}</div>`;
+    }
+    if(off)weekends+=`<i class="gantt-weekend" style="left:${i*dw}px;width:${dw}px"></i>`;
+  }
+  months+=`<div class="gantt-month" style="left:${mStart*dw}px;width:${(days-mStart)*dw}px">${dateAt(mStart).toLocaleDateString('en-GB',{month:'short',year:'numeric',timeZone:'UTC'})}</div>`;
+  const sorted=rows.slice().sort((a,b)=>ganttSectionRank(a)-ganttSectionRank(b)||(ganttSectionRank(a)===4?ganttRemainingPackageRank(a)-ganttRemainingPackageRank(b):0)||CP_CITY_ORDER.indexOf(a.city)-CP_CITY_ORDER.indexOf(b.city)||ganttDownstreamSubRank(a)-ganttDownstreamSubRank(b)||cpBatchNumber(a.batch_no)-cpBatchNumber(b.batch_no)||(ganttDayUTC(a.planned_start)||0)-(ganttDayUTC(b.planned_start)||0));
+  const grouped=[];const groupMap=new Map();
+  sorted.forEach(r=>{const label=`${ganttSectionLabel(r)} · ${r.city} · ${r.batch_no||r.batch_label||'Project Level'}`;if(!groupMap.has(label)){const x={label,rows:[]};groupMap.set(label,x);grouped.push(x)}groupMap.get(label).rows.push(r)});
+  let body='';
+  grouped.forEach(gr=>{
+    const key=ganttGroupSafeKey(gr.label),collapsed=ganttCollapsedGroups.has(key);
+    const starts=gr.rows.map(r=>ganttDayUTC(r.planned_start)).filter(Number.isFinite),finishes=gr.rows.map(r=>ganttDayUTC(r.planned_finish)).filter(Number.isFinite),expected=gr.rows.map(r=>ganttDayUTC(r.exp_finish)||ganttDayUTC(r.planned_finish)).filter(Number.isFinite);
+    const gps=starts.length?Math.min(...starts):null,gpf=finishes.length?Math.max(...finishes):null,gef=expected.length?Math.max(...expected):gpf;
+    const statuses=gr.rows.map(statusOf);
+    const gcls=statuses.every(x=>x==='Completed')?'completed':statuses.some(x=>x==='Delayed')?'delayed':statuses.some(x=>x==='In Progress')?'inprogress':'plan';
+    const gext=gpf!==null&&gef!==null&&gef>gpf&&gef>=min?`<span class="gantt-group-extension" style="left:${Math.max(0,((gpf-min)/DAY+1)*dw)}px;width:${Math.max(dw,((gef-Math.max(gpf,min))/DAY)*dw)}px"></span>`:'';
+    const visibleGps=gps!==null?Math.max(gps,min):null;
+    const gbar=visibleGps!==null&&gpf!==null&&gpf>=min?`<span class="gantt-group-bar ${gcls}" title="WBS planned duration" style="left:${((visibleGps-min)/DAY)*dw}px;width:${Math.max(dw,((gpf-visibleGps)/DAY+1)*dw)}px"></span>`:'';
+    const gprogress=Math.round(gr.rows.reduce((sum,r)=>sum+actualProgressPercent(r),0)/Math.max(1,gr.rows.length));
+    const gexpStarts=gr.rows.map(r=>ganttDayUTC(r.exp_start)||ganttDayUTC(r.planned_start)).filter(Number.isFinite);
+    const ges=gexpStarts.length?Math.min(...gexpStarts):gps;
+    const cityName=gr.rows[0].city||'—';
+    const batchName=gr.rows[0].batch_no||gr.rows[0].batch_label||'Project Level';
+    body+=`<div class="gantt-group-row ${collapsed?'collapsed':''}" style="--timeline-width:${tw}px;--day-width:${dw}px">
+      <div onclick="toggleGanttGroup('${key}')"><span class="gantt-group-label"><span class="gantt-group-arrow">▼</span>${CITY_ICONS[cityName]||''} ${escHtml(gr.label)}</span></div>
+      <div class="gantt-group-summary-cell">${escHtml(cityName)}</div>
+      <div class="gantt-group-summary-cell">${escHtml(batchName)}</div>
+      <div class="gantt-group-summary-cell gantt-group-progress">${gprogress}%</div>
+      <div class="gantt-group-summary-cell">${gps!==null?fmtDateShort(new Date(gps)):'—'}</div>
+      <div class="gantt-group-summary-cell">${gpf!==null?fmtDateShort(new Date(gpf)):'—'}</div>
+      <div class="gantt-group-summary-cell">${ges!==null?fmtDateShort(new Date(ges)):'—'}</div>
+      <div class="gantt-group-summary-cell">${gef!==null?fmtDateShort(new Date(gef)):'—'}</div>
+      <div class="gantt-group-timeline">${weekends}${gbar}${gext}</div>
+    </div>`;
+    if(collapsed)return;
+    gr.rows.forEach(r=>{
+      const res=ganttAssignedResource(r),st=statusOf(r),cls=st==='Completed'?'completed':st==='Delayed'?'delayed':st==='In Progress'?'inprogress':'plan';
+      const ps=ganttDayUTC(r.planned_start),pf=ganttDayUTC(r.planned_finish),ef=ganttDayUTC(r.exp_finish),visiblePs=ps!==null?Math.max(ps,min):null;
+      const planned=visiblePs!==null&&pf!==null&&pf>=min?`<span class="gantt-bar ${cls}" style="left:${((visiblePs-min)/DAY)*dw}px;width:${Math.max(dw,((pf-visiblePs)/DAY+1)*dw)}px"></span>`:'';
+      let taskResourceBars='';
+      const nRes=Number(res);
+      if(isFinite(nRes)&&nRes>0&&ps!==null&&pf!==null){
+        const iStart=Math.max(0,Math.round((ps-min)/DAY));
+        const iEnd=Math.min(days-1,Math.round((pf-min)/DAY));
+        for(let i=iStart;i<=iEnd;i++){
+          const d=dateAt(i); if(d.getUTCDay()===5) continue;
+          taskResourceBars+=`<span class="gantt-task-resource" title="${d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric',timeZone:'UTC'})} · ${nRes} resources" style="left:${i*dw}px;width:${dw}px;min-width:${dw}px;max-width:${dw}px">${dw>=8?nRes:''}</span>`;
+        }
+      }
+      const extension=pf&&ef&&ef>pf&&ef>=min?`<span class="gantt-forecast-extension" style="left:${Math.max(0,((pf-min)/DAY+1)*dw)}px;width:${Math.max(dw,((ef-Math.max(pf,min))/DAY)*dw)}px"></span>`:'';
+      body+=`<div class="gantt-row" style="--timeline-width:${tw}px"><div class="gantt-left"><div class="gantt-activity">${escHtml(r.activity||'—')}</div><div class="gantt-meta">${escHtml(r.act_type||'')} · ${getStatusBadge(st)}</div></div><div class="gantt-cell">${escHtml(r.city)}</div><div class="gantt-cell">${escHtml(r.batch_no||'—')}</div><div class="gantt-cell">${progressPercent(r)??0}%</div><div class="gantt-cell">${fmtDateShort(r.planned_start)}</div><div class="gantt-cell">${fmtDateShort(r.planned_finish)}</div><div class="gantt-cell">${fmtDateShort(r.exp_start)}</div><div class="gantt-cell">${fmtDateShort(r.exp_finish)}</div><div class="gantt-timeline">${weekends}${planned}${taskResourceBars}${extension}</div></div>`;
+    });
+  });
+  root.innerHTML=`<div class="gantt-grid" style="--day-width:${dw}px;--timeline-width:${tw}px"><div class="gantt-head" style="--timeline-width:${tw}px"><div class="gantt-hcell activity">Activity / Workstream</div><div class="gantt-hcell">City</div><div class="gantt-hcell">Batch</div><div class="gantt-hcell">Progress</div><div class="gantt-hcell">Plan<br>Start</div><div class="gantt-hcell">Plan<br>Finish</div><div class="gantt-hcell">Expected<br>Start</div><div class="gantt-hcell">Expected<br>Finish</div><div class="gantt-timeline-head">${months}${dayheads}</div></div>${body}</div>`;
+  enableGanttDragScroll();
+  renderResourceHistogram(rows,min,max,dw);
+}
+function renderResourceHistogram(rows,min,max,dw){
+  const DAY=86400000,days=Math.round((max-min)/DAY)+1,loads=Array(days).fill(0);
+  rows.forEach(r=>{const n=Number(ganttAssignedResource(r));if(!isFinite(n)||n<=0)return;const a=ganttDayUTC(r.planned_start),b=ganttDayUTC(r.exp_finish)||ganttDayUTC(r.planned_finish);if(!a||!b)return;for(let i=Math.max(0,Math.round((a-min)/DAY));i<=Math.min(days-1,Math.round((b-min)/DAY));i++){const d=new Date(min+i*DAY);if(d.getUTCDay()!==5)loads[i]+=n;}});
+  const peak=Math.max(0,...loads),totalAssigned=rows.reduce((s,r)=>s+(Number(ganttAssignedResource(r))||0),0),missing=rows.filter(r=>!Number(ganttAssignedResource(r))).length;
+  const el=document.getElementById('resourceHistogram');if(el)el.innerHTML=`<div class="resource-daily-scroll"><div class="resource-daily-grid">${loads.map((v,i)=>{const d=new Date(min+i*DAY),friday=d.getUTCDay()===5;return `<div class="resource-day-wrap ${friday?'friday':''}"><div class="resource-day-value">${v}</div><div class="resource-day-bar ${v===peak&&peak>0?'peak':''}" style="height:${peak?Math.max(2,v/peak*125):2}px" data-tip="${dateAtHistogram(min,i)} · ${v} resources"></div><div class="resource-day-label">${d.getUTCDate()}<br>${d.toLocaleDateString('en-GB',{month:'short',timeZone:'UTC'})}</div></div>`;}).join('')}</div></div>`;
+}
+function dateAtHistogram(min,i){return new Date(min+i*86400000).toLocaleDateString('en-GB',{day:'2-digit',month:'short',timeZone:'UTC'});}
+function setDetailFilter(){renderDetailTable();} function filterDetailTable(){renderDetailTable();}
 
 /* ═══════════════════════════════════════════════════════════════
    DATA STRUCTURE V24 — latest workbook-driven model
@@ -5679,7 +5895,7 @@ function parseXlsxBuffer(buffer){
     const ci=(name,fallback)=>Object.prototype.hasOwnProperty.call(headers,name)?headers[name]:fallback;
     const rootCauseHeader = Object.keys(headers).find(h => /root\s*(cause|cuase).*delay|delay.*root\s*(cause|cuase)/i.test(h));
     const remarkHeader = Object.keys(headers).find(h => /^remarks?$/.test(h));
-    const C={batch:1,workstream:ci('workstream',2),activity:ci('activity',3),plannedStart:ci('planned start',5),plannedFinish:ci('planned finish',6),expectedStart:ci('expected start',7),expectedFinish:ci('expected finish',8),actualStart:ci('actual start / expected start',9),actualFinish:ci('actual finish / expected finish',10),progress:ci('% progress',11),status:ci('status',12),rootCause:rootCauseHeader!==undefined?headers[rootCauseHeader]:null,remark:remarkHeader!==undefined?headers[remarkHeader]:ci('remark',22)};
+    const C={batch:1,workstream:ci('workstream',2),activity:ci('activity',3),plannedStart:ci('planned start',5),plannedFinish:ci('planned finish',6),expectedStart:ci('expected start',7),expectedFinish:ci('expected finish',8),actualStart:ci('actual start / expected start',9),actualFinish:ci('actual finish / expected finish',10),progress:ci('% progress',11),status:ci('status',12),assignedResources:(Object.keys(headers).find(h=>/(assigned\s*resources?|resources?\s*assigned|assigned\s*to|resource\s*count)/i.test(h))||null),rootCause:rootCauseHeader!==undefined?headers[rootCauseHeader]:null,remark:remarkHeader!==undefined?headers[remarkHeader]:ci('remark',22)};
     let currentGroup='';const rows=[];
     for(let r=headerRow+1;r<=range.e.r;r++){
       const group=clean(cell(ws,r,C.batch));if(group)currentGroup=group;
@@ -5701,7 +5917,7 @@ function parseXlsxBuffer(buffer){
         const d=Math.round((new Date(effectiveExpectedFinish+'T00:00:00Z')-new Date(pf+'T00:00:00Z'))/86400000);
         if(d>0)delay=d;
       }
-      rows.push({city,workstream:mappedWs,activity,batch_label:currentGroup,batch_no:bn,act_type:deriveType(mappedWs,activity,helpers),planned_start:plannedStart,planned_finish:pf,exp_start:effectiveExpectedStart,exp_finish:effectiveExpectedFinish,actual_start:latestStart,actual_finish:latestFinish,progress:p,status:normalizeStatus(cell(ws,r,C.status),p),delay_days:delay,root_cause_delay:C.rootCause!==null?clean(cell(ws,r,C.rootCause)):'',remark:clean(cell(ws,r,C.remark))||'',source_row:r+1});
+      rows.push({city,workstream:mappedWs,activity,batch_label:currentGroup,batch_no:bn,act_type:deriveType(mappedWs,activity,helpers),planned_start:plannedStart,planned_finish:pf,exp_start:effectiveExpectedStart,exp_finish:effectiveExpectedFinish,actual_start:latestStart,actual_finish:latestFinish,progress:p,status:normalizeStatus(cell(ws,r,C.status),p),assigned_resources:C.assignedResources?clean(cell(ws,r,headers[C.assignedResources])):'',delay_days:delay,root_cause_delay:C.rootCause!==null?clean(cell(ws,r,C.rootCause)):'',remark:clean(cell(ws,r,C.remark))||'',source_row:r+1});
     }
     cities[city]=rows;
   }
