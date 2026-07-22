@@ -2851,6 +2851,29 @@ button[onclick*="switchTab('milestones'"]{display:none!important;}
 .gantt-group-resource{top:27px!important;height:15px!important;z-index:2;}
 .gantt-group-row{cursor:pointer;transition:.15s ease}.gantt-group-row:hover{background:#dfeaf3}.gantt-group-row:hover>div:first-child{background:#dfeaf3}.gantt-group-label{display:flex;align-items:center;gap:7px}.gantt-group-arrow{display:inline-grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#fff;border:1px solid #b9cddd;font-size:9px;transition:transform .16s ease}.gantt-group-row.collapsed .gantt-group-arrow{transform:rotate(-90deg)}.gantt-group-timeline{position:relative;min-height:34px;background:repeating-linear-gradient(to right,transparent 0,transparent calc(var(--day-width) - 1px),rgba(237,241,245,.8) calc(var(--day-width) - 1px),rgba(237,241,245,.8) var(--day-width));padding:0!important}.gantt-group-bar{position:absolute;top:8px;height:16px;border-radius:4px;background:#bfd7ea;border:1px solid #5f8fb5;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:900;color:#17324d;overflow:hidden;white-space:nowrap}.gantt-group-bar.delayed{background:#fecaca;border-color:#ef4444;color:#991b1b}.gantt-group-bar.inprogress{background:#fef3c7;border-color:#f59e0b;color:#92400e}.gantt-group-bar.completed{background:#dcfce7;border-color:#22c55e;color:#166534}.gantt-group-extension{position:absolute;top:8px;height:16px;border-top:2px dashed #ef4444;border-bottom:2px dashed #ef4444;border-right:2px dashed #ef4444;border-radius:0 4px 4px 0;background:rgba(254,226,226,.16)}.gantt-group-resource{position:absolute;top:7px;height:18px;display:flex;align-items:center;justify-content:center;border-radius:3px;background:#dbeafe;border:1px solid #60a5fa;color:#17324d;font-size:8px;font-weight:900;box-sizing:border-box;z-index:2}.gantt-group-resource.zero{display:none}.gantt-task-resource{position:absolute;top:11px;height:16px;display:grid;place-items:center;text-align:center;line-height:1;padding:0;margin:0;font-size:8px;font-weight:900;color:#17324d;z-index:6;pointer-events:none;box-sizing:border-box;background:rgba(255,255,255,.32);border-left:1px solid rgba(37,99,235,.28);border-right:1px solid rgba(37,99,235,.28);overflow:hidden}.gantt-task-resource.friday{display:none}.gantt-group-row .gantt-group-timeline{cursor:default}.gantt-group-row>div:first-child{cursor:pointer}.gantt-group-arrow{pointer-events:none}
 .detail-filters.gantt-filter-grid{grid-template-columns:minmax(210px,1.3fr) repeat(5,minmax(135px,.8fr)) auto!important;}
+
+/* Assigned Resources column restored — Excel-driven, read-only */
+.gantt-head,.gantt-row{
+  grid-template-columns:310px 62px 72px 62px 78px 78px 78px 78px 74px var(--timeline-width)!important;
+}
+.gantt-group-row{
+  grid-template-columns:310px 62px 72px 62px 78px 78px 78px 78px 74px var(--timeline-width)!important;
+}
+.gantt-resource-value{
+  font-size:10px;
+  font-weight:900;
+  color:#17324d;
+  background:#f8fbfd;
+}
+@media(max-width:1000px){
+  .gantt-head,.gantt-row{
+    grid-template-columns:260px 52px 60px 54px 72px 72px 72px 72px 68px var(--timeline-width)!important;
+  }
+  .gantt-group-row{
+    grid-template-columns:260px 52px 60px 54px 72px 72px 72px 72px 68px var(--timeline-width)!important;
+  }
+}
+
 </style>
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
@@ -5576,6 +5599,7 @@ function renderDetailTable(){
       <div class="gantt-group-summary-cell">${gpf!==null?fmtDateShort(new Date(gpf)):'—'}</div>
       <div class="gantt-group-summary-cell">${ges!==null?fmtDateShort(new Date(ges)):'—'}</div>
       <div class="gantt-group-summary-cell">${gef!==null?fmtDateShort(new Date(gef)):'—'}</div>
+      <div class="gantt-group-summary-cell gantt-resource-value">—</div>
       <div class="gantt-group-timeline">${weekends}${gbar}${gext}</div>
     </div>`;
     if(collapsed)return;
@@ -5594,10 +5618,10 @@ function renderDetailTable(){
         }
       }
       const extension=pf&&ef&&ef>pf&&ef>=min?`<span class="gantt-forecast-extension" style="left:${Math.max(0,((pf-min)/DAY+1)*dw)}px;width:${Math.max(dw,((ef-Math.max(pf,min))/DAY)*dw)}px"></span>`:'';
-      body+=`<div class="gantt-row" style="--timeline-width:${tw}px"><div class="gantt-left"><div class="gantt-activity">${escHtml(r.activity||'—')}</div><div class="gantt-meta">${escHtml(r.act_type||'')} · ${getStatusBadge(st)}</div></div><div class="gantt-cell">${escHtml(r.city)}</div><div class="gantt-cell">${escHtml(r.batch_no||'—')}</div><div class="gantt-cell">${progressPercent(r)??0}%</div><div class="gantt-cell">${fmtDateShort(r.planned_start)}</div><div class="gantt-cell">${fmtDateShort(r.planned_finish)}</div><div class="gantt-cell">${fmtDateShort(r.exp_start)}</div><div class="gantt-cell">${fmtDateShort(r.exp_finish)}</div><div class="gantt-timeline">${weekends}${planned}${taskResourceBars}${extension}</div></div>`;
+      body+=`<div class="gantt-row" style="--timeline-width:${tw}px"><div class="gantt-left"><div class="gantt-activity">${escHtml(r.activity||'—')}</div><div class="gantt-meta">${escHtml(r.act_type||'')} · ${getStatusBadge(st)}</div></div><div class="gantt-cell">${escHtml(r.city)}</div><div class="gantt-cell">${escHtml(r.batch_no||'—')}</div><div class="gantt-cell">${progressPercent(r)??0}%</div><div class="gantt-cell">${fmtDateShort(r.planned_start)}</div><div class="gantt-cell">${fmtDateShort(r.planned_finish)}</div><div class="gantt-cell">${fmtDateShort(r.exp_start)}</div><div class="gantt-cell">${fmtDateShort(r.exp_finish)}</div><div class="gantt-cell gantt-resource-value">${res>0?res:'—'}</div><div class="gantt-timeline">${weekends}${planned}${taskResourceBars}${extension}</div></div>`;
     });
   });
-  root.innerHTML=`<div class="gantt-grid" style="--day-width:${dw}px;--timeline-width:${tw}px"><div class="gantt-head" style="--timeline-width:${tw}px"><div class="gantt-hcell activity">Activity / Workstream</div><div class="gantt-hcell">City</div><div class="gantt-hcell">Batch</div><div class="gantt-hcell">Progress</div><div class="gantt-hcell">Plan<br>Start</div><div class="gantt-hcell">Plan<br>Finish</div><div class="gantt-hcell">Expected<br>Start</div><div class="gantt-hcell">Expected<br>Finish</div><div class="gantt-timeline-head">${months}${dayheads}</div></div>${body}</div>`;
+  root.innerHTML=`<div class="gantt-grid" style="--day-width:${dw}px;--timeline-width:${tw}px"><div class="gantt-head" style="--timeline-width:${tw}px"><div class="gantt-hcell activity">Activity / Workstream</div><div class="gantt-hcell">City</div><div class="gantt-hcell">Batch</div><div class="gantt-hcell">Progress</div><div class="gantt-hcell">Plan<br>Start</div><div class="gantt-hcell">Plan<br>Finish</div><div class="gantt-hcell">Expected<br>Start</div><div class="gantt-hcell">Expected<br>Finish</div><div class="gantt-hcell">Assigned<br>Resources</div><div class="gantt-timeline-head">${months}${dayheads}</div></div>${body}</div>`;
   enableGanttDragScroll();
   renderResourceHistogram(rows,min,max,dw);
 }
